@@ -1,0 +1,101 @@
+:root {
+  /* BEIGE */
+  --beige_500: #98908b;
+  --beige_100: #f8f4f0;
+
+  /* GREY */
+  --grey_900: #201f24;
+  --grey_500: #696868;
+  --grey_300: #b3b3b3;
+  --grey_100: #f2f2f2;
+
+  /* SECONDARY COLORS */
+  --green: #277c78;
+  --yellow: #f2cdac;
+  --cyan: #82c9d7;
+  
+  --navy: #626070;
+  --red: #c94736;
+  --purple: #826db0;
+
+  /* OTHER COLORS */
+  --purple: #af81ba;
+  --turquoise: #597c7c;
+  --brown: #93674f;
+
+  --magenta: #934f6f;
+  --blue: #3f82b2;
+  --navy_grey: #97a0ac;
+
+  --army_green: #7f9161;
+  --gold: #cab361;
+  --orange: #be6c49;
+
+  /* WHITE */
+  --white: #ffffff;
+
+}
+
+h1 {
+  font: 32px/1.5 Georgia, serif;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* TYPOGRAPHY */
+
+.text_present_1 {
+  /* font-family: ; */
+
+  font-size: 32px;
+  line-height: 120%;
+  letter-spacing: 0px;
+}
+
+.text_present_2 {
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0px;
+}
+
+.text_present_3 {
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0px;
+}
+
+.text_present_4 {
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0px;
+}
+
+.text_present_4_bold {
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0px;
+}
+
+.text_present_5 {
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: 0px;
+}
+
+.text_present_5_bold {
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: 0px;
+}

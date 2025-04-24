@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'public sans bold';
+  src: url('assets/fonts/Public_Sans/static/PublicSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'public sans regular';
+  src: url('assets/fonts/Public_Sans/static/PublicSans-Regular.ttf') format('truetype');
+}
+
+
 :root {
   /* BEIGE */
   --beige_500: #98908b;
@@ -36,14 +47,16 @@
 
 }
 
-h1 {
-  font: 32px/1.5 Georgia, serif;
-}
-
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+
+  font-family: 'public sans bold', sans-serif;
+}
+
+h1 {
+  font: 32px/1.5 Georgia, serif;
 }
 
 ul {
@@ -57,7 +70,7 @@ button {
 /* TYPOGRAPHY */
 
 .text_present_1 {
-  /* font-family: ; */
+  font-family: 'public sans bold', sans-serif;
 
   font-size: 32px;
   line-height: 120%;
@@ -65,36 +78,47 @@ button {
 }
 
 .text_present_2 {
+  font-family: 'public sans bold', sans-serif;
+
   font-size: 20px;
   line-height: 120%;
   letter-spacing: 0px;
 }
 
 .text_present_3 {
+  font-family: 'public sans bold', sans-serif;
+
   font-size: 16px;
   line-height: 150%;
   letter-spacing: 0px;
 }
 
 .text_present_4 {
+  font-family: 'public sans regular', sans-serif;
+
   font-size: 14px;
   line-height: 150%;
   letter-spacing: 0px;
 }
 
 .text_present_4_bold {
+  font-family: 'public sans bold', sans-serif;
   font-size: 14px;
   line-height: 150%;
   letter-spacing: 0px;
 }
 
 .text_present_5 {
+  font-family: 'public sans regular', sans-serif;
+
   font-size: 12px;
   line-height: 150%;
   letter-spacing: 0px;
 }
 
 .text_present_5_bold {
+  font-family: 'public sans bold', sans-serif;
+
   font-size: 12px;
   line-height: 150%;
   letter-spacing: 0px;

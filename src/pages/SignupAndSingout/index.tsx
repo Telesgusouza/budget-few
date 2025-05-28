@@ -72,39 +72,133 @@ export default function SignupAndSingout() {
         }
 
         else if (toggleUserOperation && !ifName && !ifEmail && !ifPassword) {
-            setBtnDisabled(true);
-
-            try {
-
-                const token = await axios.post(`${baseurl}/auth/register`, {
-                    name: name,
-                    login: email,
-                    password: password + ""
-                });
-
-                navigateToHome(token.data.token)
-            } catch (error) {
-                console.error('Erro de rede: ', error);
-            }
-            setBtnDisabled(false);
+            handleRegister();
         } else if (!toggleUserOperation && !ifEmail && !ifPassword) {
-            setBtnDisabled(true);
+            handleLogin();
+        }
+    }
 
-            try {
+    async function handleLogin() {
+        setBtnDisabled(true);
 
-                const token = await axios.post(`${baseurl}/auth/login`, {
-                    login: email,
-                    password: password
-                });
+        try {
 
-                navigateToHome(token.data.token)
+            const token = await axios.post(`${baseurl}/auth/login`, {
+                login: email,
+                password: password
+            });
 
-            } catch (error) {
-                console.error('Erro ao fazer login de usuario: ', error);
+            navigateToHome(token.data.token)
+
+        } catch (error) {
+
+            if (axios.isAxiosError(error)) {
+
+                console.error("Login error: ", error.response?.data.message);
+
+                switch (error.response?.data.message) {
+                    case "Authentication Failed. id Incorrect password": {
+                        setWrongPassword(true);
+                        toast.warn("Senha incorreta, tente novamente");
+                        break;
+                    }
+
+                    case "Authentication Failed. id Account does not exist": {
+                        setWrongEmail(true);
+                        toast.warn("Conta não existe");
+                        break;
+                    }
+
+                    case "Authentication Failed. id Account deactivated or blocked": {
+                        setWrongEmail(true);
+                        setWrongPassword(true);
+                        toast.error("Conta desativada ou bloqueada");
+                        break;
+                    }
+
+                    case "Authentication Failed. id Error while generating token.": {
+                        toast.error("Erro ao gerar token, tente novamente mais tarde");
+                        break;
+                    }
+
+                    case "Authentication Failed. id Error authenticating account": {
+                        toast.warn("Erro ao fazer autenticação");
+                        setWrongEmail(true);
+                        break;
+                    }
+
+                    default: {
+                        toast.warn("Surgiu um erro desconhecido no autenticação, tente novamente mais tarde");
+                        setWrongEmail(true);
+                        setWrongPassword(true);
+                    }
+                }
+
+            } else {
+                toast.warn("Surgiu um erro desconhecido, tente novamente mais tarde");
+                setWrongEmail(true);
+                setWrongPassword(true);
+                console.error("Error login: ", error);
             }
 
-            setBtnDisabled(false);
         }
+
+        setBtnDisabled(false);
+    }
+
+    async function handleRegister() {
+        setBtnDisabled(true);
+
+        try {
+
+            const token = await axios.post(`${baseurl}/auth/register`, {
+                name: name,
+                login: email,
+                password: password + ""
+            });
+
+            navigateToHome(token.data.token)
+        } catch (error) {
+
+            if (axios.isAxiosError(error)) {
+
+                switch (error.response?.data.message) {
+                    case "Exception Of Existing Email. id User already exists": {
+                        setWrongEmail(true);
+                        toast.warn("Conta já existe");
+                        break;
+                    }
+
+                    case "Error Creating Token. id Error while generating token.": {
+                        toast.error("Erro ao criar conta, tente novamente mais tarde");
+                        break;
+                    }
+
+                    case "Invalid Field. id invalid email": {
+                        toast.error("Email invalido, tente novamente");
+                        setWrongEmail(true);
+                        break;
+                    }
+
+                    case "Invalid Field. id invalid password": {
+                        toast.error("Senha invalida, tente novamente");
+                        setWrongPassword(true);
+                        break;
+                    }
+
+                    default: {
+                        toast.error("Erro desconhecido na criação de usuario, tente novamente mais tarde");
+                        console.error("Error register: ", error.response?.data.message);
+                    }
+                }
+                
+            } else {
+                toast.error("Erro desconhecido, tente novamente mais tarde");
+                console.error('Error register: ', error);
+            }
+
+        }
+        setBtnDisabled(false);
     }
 
     function toggleShowLoginOperations() {

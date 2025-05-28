@@ -82,7 +82,6 @@ export default function ChangePassword() {
                 toast.error("Error ao criar senha")
                 console.error("error " + error);
             }
-
         }
     }
 

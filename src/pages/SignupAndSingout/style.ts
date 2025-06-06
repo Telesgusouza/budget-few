@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
-interface ISidebar {
-    background: string;
-}
+import sideImage from '../../assets/imgs/login_and_signup_illustration.svg';
+
 
 export const Container = styled.div`
     display: flex;
@@ -35,7 +34,7 @@ export const HeaderMobile = styled.header`
 
 `;
 
-export const Sidebar = styled.section<ISidebar>`
+export const Sidebar = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -48,7 +47,9 @@ export const Sidebar = styled.section<ISidebar>`
     padding: 40px;
     border-radius: 12px;
     
-    background-image: url(${props => props.background});
+
+    background-image: url(${sideImage});
+
     background-position: top;
     background-size: cover;
     background-repeat: no-repeat;

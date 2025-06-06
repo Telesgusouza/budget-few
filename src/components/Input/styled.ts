@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 interface iProps {
-    paddingRight: "password" | "";
-    wrong: "wrong" | "";
+    $pright: "password" | "";
+    $wrong: "wrong" | "";
 }
 
 export const Label = styled.label<iProps>`
@@ -31,7 +31,7 @@ export const Label = styled.label<iProps>`
         width: 100%;
         padding: 12px 20px;
 
-        ${props => props.paddingRight === "password" && css`
+        ${props => props.$pright === "password" && css`
             padding-right: 50px;
         `}
 
@@ -42,7 +42,7 @@ export const Label = styled.label<iProps>`
 
         outline: none;
 
-        ${props => props.wrong === "wrong" && css`
+        ${props => props.$wrong === "wrong" && css`
             
             border: 1px solid var(--red);
         `}

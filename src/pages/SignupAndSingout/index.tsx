@@ -9,7 +9,6 @@ import baseurl from '../../../baseurl';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import sideImage from '../../assets/imgs/login_and_signup_illustration.svg';
 import logoimage from '../../assets/imgs/Logo.svg';
 
 import LoadingInRotation from '../../components/LoadingInRotation';
@@ -54,7 +53,6 @@ export default function SignupAndSingout() {
 
         const defaultEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        // ifs
         const ifName: boolean = toggleUserOperation && name.length < 3;
         const ifEmail: boolean = !defaultEmail.test(email);
         const ifPassword: boolean = password.length <= 7;
@@ -191,7 +189,7 @@ export default function SignupAndSingout() {
                         console.error("Error register: ", error.response?.data.message);
                     }
                 }
-                
+
             } else {
                 toast.error("Erro desconhecido, tente novamente mais tarde");
                 console.error('Error register: ', error);
@@ -218,13 +216,28 @@ export default function SignupAndSingout() {
 
         localStorage.setItem("token", JSON.stringify({ token: token }));
 
-        // true register
         toast.success(`${toggleUserOperation ? "Registrado" : "Logado"} com sucesso`);
 
         setTimeout(() => {
             navigate("/home", { replace: true });
         }, 500);
 
+    }
+
+    function guestUser() {
+
+        localStorage.setItem("guest user", JSON.stringify({
+            id: "id_guest_user",
+            login: "visitante@gmail.com",
+            password: "",
+            name: "Visitante",
+
+            role: "USER"
+        }));
+
+        setTimeout(() => {
+            navigate("/home", { replace: true });
+        }, 700);
     }
 
     return (
@@ -234,7 +247,7 @@ export default function SignupAndSingout() {
                 <img src={logoimage} alt="logo da empresa" />
             </Styled.HeaderMobile>
 
-            <Styled.Sidebar background={sideImage} >
+            <Styled.Sidebar >
 
                 <img src={logoimage} alt="logo da empresa" />
 
@@ -301,7 +314,14 @@ export default function SignupAndSingout() {
                         <p className='text_present_4'>
                             {toggleUserOperation ? "Já tem uma conta?" : "Precisa criar uma conta?"}
 
-                            <strong className='text_present_4_bold' onClick={() => toggleShowLoginOperations()} > {toggleUserOperation ? "Entrar" : "Cadastre-se"}</strong></p></Styled.ChangeLoginToRegister>
+                            <strong className='text_present_4_bold' onClick={() => toggleShowLoginOperations()} > {toggleUserOperation ? "Entrar" : "Cadastre-se"}</strong></p>
+
+                        <p
+                            className='text_present_4'
+                        > <strong onClick={() => guestUser()} >  Entrar como visitante</strong> </p>
+
+                    </Styled.ChangeLoginToRegister>
+
 
                 </form>
 

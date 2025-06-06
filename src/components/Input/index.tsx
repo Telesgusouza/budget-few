@@ -10,13 +10,13 @@ interface IInput {
     type?: "text" | "password" | "email";
     label: string;
     value: string;
-    wrong?: boolean;
+    wrong: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 
     onToggleShowPassword?: (show: boolean) => void;
 }
 
-export default function Input({ type = "text", label, onChange, value, onToggleShowPassword, wrong }: IInput) {
+export default function Input({ type = "text", label, onChange, value, onToggleShowPassword, wrong = false }: IInput) {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -35,7 +35,10 @@ export default function Input({ type = "text", label, onChange, value, onToggleS
     }
 
     return (
-        <Styled.Label paddingRight={onToggleShowPassword ? "password" : ""} wrong={wrong ? 'wrong' : ''} >
+        <Styled.Label 
+            $pright={onToggleShowPassword ? "password" : ""} 
+            $wrong={wrong ? 'wrong' : ''} 
+        >
             <span className='text_present_5_bold' >{label}</span>
 
             <div>

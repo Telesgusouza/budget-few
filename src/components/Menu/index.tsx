@@ -2,6 +2,7 @@ import * as Styled from './style';
 import { useState } from 'react';
 
 import logo from '../../assets/imgs/Logo.svg';
+import logo_mobile from '../../assets/imgs/Logo_mobile.svg';
 
 import icon_house from '../../assets/icons/house.svg';
 import icon_house_select from '../../assets/icons/house_select.svg';
@@ -27,11 +28,22 @@ interface ISelect {
 export default function Menu() {
 
     const [selectMenu] = useState<ISelect>({ option: 'recurring bills' });
+    const [showMenu, setShowMenu] = useState<boolean>(true);
 
     return (
-        <Styled.Menu>
+        <Styled.Menu show_menu={showMenu ? "hidden" : "show"} >
             <div>
-                <img src={logo} alt="logo do site" className='logo' />
+
+                {showMenu ? (
+                    <>
+                        <img src={logo_mobile} alt="logo do site mobile" className='logo' />
+                    </>)
+                    : (
+                        <>
+                            <img src={logo} alt="logo do site" className='logo' />
+                        </>
+                    )}
+
 
                 <ul>
                     <li className={"text_present_3 "
@@ -41,13 +53,15 @@ export default function Menu() {
                             loading='lazy'
                             src={selectMenu.option === "overview" ? icon_house_select : icon_house}
                             alt="logo de casa"
-                        
-                        /> Visão geral</li>
+
+                        />
+                        Visão geral
+                    </li>
 
                     <li className={"text_present_3 "
                         + (selectMenu.option === "transactions" && "selected")} >
                         <img
-                            
+
                             loading='lazy'
                             src={selectMenu.option === "transactions" ? icon_transaction_select : icon_transaction}
                             alt="logo de transação"
@@ -61,7 +75,7 @@ export default function Menu() {
                             loading='lazy'
                             src={selectMenu.option === "budgets" ? icon_budget_select : icon_budget}
                             alt="logo de orçamento"
-                        
+
                         /> Orçamentos</li>
 
                     <li className={"text_present_3 "
@@ -81,15 +95,20 @@ export default function Menu() {
                             loading='lazy'
                             src={selectMenu.option === "recurring bills" ? icon_recurring_bills_select : icon_recurring_bills}
                             alt="logo de contas recorrentes"
-                        
+
                         /> Contas recorrentes</li>
                 </ul>
 
             </div>
 
-            <Styled.MinimizeMenu>
+            <Styled.MinimizeMenu
+                show_menu={showMenu ? "hidden" : "show"}
+                onClick={() => setShowMenu(show => !show)}
+            >
+
                 <img src={icon_arrow_fat} alt="icone de flecha" />
-                <strong className='text_present_3' >Minimizar Menu</strong>
+                <strong className='text_present_3' >{!showMenu && "Minimizar Menu"}</strong>
+
             </Styled.MinimizeMenu>
 
         </Styled.Menu>

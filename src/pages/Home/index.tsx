@@ -4,6 +4,7 @@ import Budgets from '../../components/Budgets';
 import Menu from '../../components/Menu';
 import Pots from '../../components/Pots';
 import Values from '../../components/Values';
+import Transactions from '../../components/Transactions';
 
 export default function Home() {
 
@@ -24,6 +25,7 @@ export default function Home() {
                         
                         <div className='content_left' >
                             <Pots />
+                            <Transactions />
                         </div>
                         
                         <div className='content_right' >

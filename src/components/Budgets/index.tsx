@@ -7,11 +7,11 @@ import Li from "../Li";
 export default function Budgets() {
 
     return (
-        <Styled.Container>
+        <Styled.Container className="card" >
             <Styled.Header>
                 <strong className="text_present_2" >Orçamentos</strong>
 
-                <div> <span className="text_present_4" > Veja detalhes </span> <img src={img_caret_right} alt="imagem de seta" loading="lazy" /> </div>
+                <div className="see_details" > <span className="text_present_4" > Veja detalhes </span> <img src={img_caret_right} alt="imagem de seta" loading="lazy" /> </div>
             </Styled.Header>
 
             <div className="rosquinha" >

@@ -7,11 +7,11 @@ import Li from "../Li/index.tsx";
 export default function Pots() {
 
     return (
-        <Styled.Container>
+        <Styled.Container className="card" >
             <Styled.Header>
                 <h3 className="text_present_2" >Potes</h3>
 
-                <div className="text_present_4" >
+                <div className="text_present_4 see_details" >
                     Veja detalhes
                     <img src={img_caret_right} alt="Detalhes dos potes" />
                 </div>

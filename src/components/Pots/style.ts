@@ -5,12 +5,8 @@ interface ILi {
 }
 
 export const Container = styled.article`
-    width: 100%;
-    padding: 32px;
+    
 
-    border-radius: 12px;
-
-    background-color: var(--white);
 `;
 
 export const Header = styled.div`
@@ -21,21 +17,6 @@ export const Header = styled.div`
 
     h3 {
         color: var(--grey_900);
-    }
-
-    div {
-        width: fit-content;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        color: var(--grey_500);
-
-        cursor: pointer;
-
-        img {
-            margin-left: 12px;
-        }
     }
 `;
 

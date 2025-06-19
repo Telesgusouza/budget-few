@@ -28,9 +28,17 @@ export const Grid = styled.section`
 
         margin-top: 32px;
 
+        article {
+            height: fit-content;
+        }
+
     }
 
-    .content_left {
+    .content_left, .content_right {
+        height: fit-content;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 24px;
 
     }
 

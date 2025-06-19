@@ -75,6 +75,29 @@ button {
   cursor: pointer;
 }
 
+.see_details {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  color: var(--grey_500);
+
+  cursor: pointer;
+
+}
+
+.see_details img {
+  margin-left: 12px;
+}
+
+.card {
+  width: 100%;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: var(--white);
+}
+
 /* TYPOGRAPHY */
 
 .text_present_1 {

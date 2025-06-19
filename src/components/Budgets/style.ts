@@ -1,13 +1,6 @@
 import styled from "styled-components";
 
 export const Container = styled.article`
-    width: 100%;
-
-    padding: 32px;
-    
-    background-color: var(--white);
-
-    border-radius: 12px;
 
     .rosquinha {
         /* 
@@ -42,32 +35,5 @@ export const Header = styled.div`
 
     strong {
         color: var(--grey_900);
-    }
-
-    div {
-        width: fit-content;
-        white-space: nowrap;
-        
-        display: flex;
-
-        color: var(--grey_500);
-        cursor: pointer;
-        
-
-        span {
-            margin: 0;
-            padding: 0;
-
-            justify-content: center;
-
-            margin-right: 12px;
-        }
-
-        img {
-            margin-left: 0px;
-
-            margin: 0;
-            padding: 0;
-        }
     }
 `;

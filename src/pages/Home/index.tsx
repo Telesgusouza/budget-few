@@ -5,6 +5,7 @@ import Menu from '../../components/Menu';
 import Pots from '../../components/Pots';
 import Values from '../../components/Values';
 import Transactions from '../../components/Transactions';
+import RecurringBills from '../../components/RecurringBills';
 
 export default function Home() {
 
@@ -30,6 +31,7 @@ export default function Home() {
                         
                         <div className='content_right' >
                             <Budgets />
+                            <RecurringBills />
                         </div>
                     </div>
 

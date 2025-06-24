@@ -37,6 +37,7 @@ export const Container = styled.section`
     }
 
     ul {
+        overflow: hidden;
         display: grid;
         grid-template-columns: 1fr;
         grid-gap: 12px;
@@ -55,13 +56,15 @@ export const Li = styled.li<ILi>`
     background-color: var(--beige_100);
 
     border-radius: 8px;
-    /* border-left: 4px solid var(--green); */
     border-left: 4px solid ${props => props.$border_color};
 
     padding: 20px 16px;
+    overflow: hidden;
     
     h5 {
+        width: fit-content;
         color: var(--grey_500);
+        margin-right: 5px;
     }
 
     strong {

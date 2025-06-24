@@ -26,6 +26,23 @@ export const Container = styled.article`
             }
         }
     }
+
+    @media (max-width: 630px) {
+        .rosquinha {
+            flex-direction: column;
+
+            ul {
+                grid-template-columns: 1fr 1fr;
+
+                margin-left: 0px;
+                margin-top: 16px;
+            }
+        }
+
+        .pie {
+            margin: 0 auto;
+        }
+    }
 `;
 
 export const Header = styled.div`

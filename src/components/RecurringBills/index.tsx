@@ -18,7 +18,8 @@ export default function RecurringBills() {
             <ul>
                 <Styled.Li $border_color='purple' >
                     <h5 className='text_present_4' >Contas pagas</h5>
-                    <strong className='text_present_4_bold' >R$190,00</strong>
+                    <strong className='text_present_4_bold see_text' >R$190.000.000.000.000,00</strong>
+                    {/* <strong className='text_present_4_bold' >R$190,00</strong> */}
                 </Styled.Li>
 
                 <Styled.Li $border_color='purple' >

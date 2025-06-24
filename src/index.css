@@ -91,6 +91,12 @@ button {
   margin-left: 12px;
 }
 
+.see_text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card {
   width: 100%;
   padding: 32px;

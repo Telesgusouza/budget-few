@@ -22,7 +22,7 @@ export default function Pots() {
                     <img src={img_pot} alt="imagem de pote" loading="lazy" />
                     <div>
                         <span className="text_present_4" >Total Salvo</span>
-                        <strong className="text_present_1" >$850</strong>
+                        <strong className="text_present_1 see_text" >$850.000.000</strong>
                     </div>
                 </Styled.Card>
 

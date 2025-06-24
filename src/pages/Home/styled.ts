@@ -42,7 +42,11 @@ export const Grid = styled.section`
 
     }
 
-    .content_right {
-
+    @media (max-width: 1000px) {
+        padding-bottom: 70px;
+        
+        .content_overview {
+            grid-template-columns: 1fr;
+        } 
     }
 `;

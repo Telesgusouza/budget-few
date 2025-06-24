@@ -5,8 +5,7 @@ interface ILi {
 }
 
 export const Container = styled.article`
-    
-
+overflow: hidden;
 `;
 
 export const Header = styled.div`
@@ -21,6 +20,9 @@ export const Header = styled.div`
 `;
 
 export const Card = styled.div`
+    width: 100%;
+    height: fit-content;
+
     display: flex;
     flex-direction: row;
 
@@ -42,6 +44,10 @@ export const Card = styled.div`
     }
 
     div {
+        width: 100%;
+
+        overflow: hidden;
+
         display: flex;
         flex-direction: column;
 
@@ -64,6 +70,14 @@ export const Grid = styled.div`
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 16px;
+    }
+
+    @media (max-width: 630px) {
+        flex-direction: column;
+        ul {
+            margin-top: 20px;
+            margin-left: 0;
+        }
     }
 `;
 

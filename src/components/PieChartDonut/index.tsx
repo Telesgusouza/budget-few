@@ -31,7 +31,7 @@ export default class PieChartDonut extends PureComponent {
       <PieChart
         width={240} height={240}
         //   onMouseEnter={this.onPieEnter}
-        
+        className='pie'
       >
         <Pie
           data={data}

@@ -14,6 +14,8 @@ export const Li = styled.li<IProps>`
 
     min-height: 43px;
 
+    overflow: hidden;
+
     span {
         color: var(--grey_500);
     }

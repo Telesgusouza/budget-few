@@ -1,11 +1,18 @@
 import styled from "styled-components";
 
 export const Container = styled.article`
+
+    width: 100%;
+    max-width: calc(100vw - 80px);
+
+    overflow: hidden;
+    
     ul {
-        width: 100%;
+        
     }
 
     li {
+
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -21,11 +28,15 @@ export const Container = styled.article`
         }
     }
 
+
     .transaction_div_left {
+
         display: flex;
         flex-direction: row;
 
         align-items: center;
+
+        overflow: hidden;
 
         img {
             width: 40px;
@@ -36,6 +47,7 @@ export const Container = styled.article`
         }
 
         strong {
+
             color: var(--grey_900);
             margin-left: 16px;
         }
@@ -53,6 +65,14 @@ export const Container = styled.article`
 
         span {
             color: var(--grey_500);
+            white-space: nowrap;
+        }
+    }
+
+    @media (max-width: 630px) {
+        img {
+            width: 32px;
+            height: 32px;
         }
     }
 `;

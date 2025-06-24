@@ -32,85 +32,90 @@ export default function Menu() {
 
     return (
         <Styled.Menu show_menu={showMenu ? "hidden" : "show"} >
-            <div>
 
-                {showMenu ? (
-                    <>
-                        <img src={logo_mobile} alt="logo do site mobile" className='logo' />
-                    </>)
-                    : (
+            <menu>
+
+
+                <div>
+
+                    {showMenu ? (
                         <>
-                            <img src={logo} alt="logo do site" className='logo' />
-                        </>
-                    )}
+                            <img src={logo_mobile} alt="logo do site mobile" className='logo' />
+                        </>)
+                        : (
+                            <>
+                                <img src={logo} alt="logo do site" className='logo' />
+                            </>
+                        )}
 
 
-                <ul>
-                    <li className={"text_present_3 "
-                        + (selectMenu.option === "overview" && "selected")} >
-                        <img
+                    <ul>
+                        <li className={"text_present_3 "
+                            + (selectMenu.option === "overview" && "selected")} >
+                            <img
 
-                            loading='lazy'
-                            src={selectMenu.option === "overview" ? icon_house_select : icon_house}
-                            alt="logo de casa"
+                                loading='lazy'
+                                src={selectMenu.option === "overview" ? icon_house_select : icon_house}
+                                alt="logo de casa"
 
-                        />
-                        Visão geral
-                    </li>
+                            />
+                            Visão geral
+                        </li>
 
-                    <li className={"text_present_3 "
-                        + (selectMenu.option === "transactions" && "selected")} >
-                        <img
+                        <li className={"text_present_3 "
+                            + (selectMenu.option === "transactions" && "selected")} >
+                            <img
 
-                            loading='lazy'
-                            src={selectMenu.option === "transactions" ? icon_transaction_select : icon_transaction}
-                            alt="logo de transação"
+                                loading='lazy'
+                                src={selectMenu.option === "transactions" ? icon_transaction_select : icon_transaction}
+                                alt="logo de transação"
 
-                        /> Transação</li>
+                            /> Transação</li>
 
-                    <li className={"text_present_3 "
-                        + (selectMenu.option === "budgets" && "selected")} >
-                        <img
+                        <li className={"text_present_3 "
+                            + (selectMenu.option === "budgets" && "selected")} >
+                            <img
 
-                            loading='lazy'
-                            src={selectMenu.option === "budgets" ? icon_budget_select : icon_budget}
-                            alt="logo de orçamento"
+                                loading='lazy'
+                                src={selectMenu.option === "budgets" ? icon_budget_select : icon_budget}
+                                alt="logo de orçamento"
 
-                        /> Orçamentos</li>
+                            /> Orçamentos</li>
 
-                    <li className={"text_present_3 "
-                        + (selectMenu.option === "pots" && "selected")} >
-                        <img
+                        <li className={"text_present_3 "
+                            + (selectMenu.option === "pots" && "selected")} >
+                            <img
 
-                            loading='lazy'
-                            src={selectMenu.option === "pots" ? icon_pot_select : icon_pot}
-                            alt="logo de potes"
+                                loading='lazy'
+                                src={selectMenu.option === "pots" ? icon_pot_select : icon_pot}
+                                alt="logo de potes"
 
-                        /> Potes</li>
+                            /> Potes</li>
 
-                    <li className={"text_present_3 "
-                        + (selectMenu.option === "recurring bills" && "selected")} >
-                        <img
+                        <li className={"text_present_3 "
+                            + (selectMenu.option === "recurring bills" && "selected")} >
+                            <img
 
-                            loading='lazy'
-                            src={selectMenu.option === "recurring bills" ? icon_recurring_bills_select : icon_recurring_bills}
-                            alt="logo de contas recorrentes"
+                                loading='lazy'
+                                src={selectMenu.option === "recurring bills" ? icon_recurring_bills_select : icon_recurring_bills}
+                                alt="logo de contas recorrentes"
 
-                        /> Contas recorrentes</li>
-                </ul>
+                            /> Contas recorrentes</li>
+                    </ul>
 
-            </div>
+                </div>
 
-            <Styled.MinimizeMenu
-                show_menu={showMenu ? "hidden" : "show"}
-                onClick={() => setShowMenu(show => !show)}
-            >
+                <Styled.MinimizeMenu
+                    show_menu={showMenu ? "hidden" : "show"}
+                    onClick={() => setShowMenu(show => !show)}
+                >
 
-                <img src={icon_arrow_fat} alt="icone de flecha" />
-                <strong className='text_present_3' >{!showMenu && "Minimizar Menu"}</strong>
+                    <img src={icon_arrow_fat} alt="icone de flecha" />
+                    <strong className='text_present_3' >{!showMenu && "Minimizar Menu"}</strong>
 
-            </Styled.MinimizeMenu>
+                </Styled.MinimizeMenu>
 
+            </menu>
         </Styled.Menu>
     );
 }

@@ -13,8 +13,6 @@ export default function Home() {
         <Styled.Container>
             <Menu />
 
-
-
             <Styled.Content>
 
                 <h1 className='text_present_1 '>Visão geral</h1>
@@ -23,12 +21,12 @@ export default function Home() {
                     <Values />
 
                     <div className='content_overview' >
-                        
+
                         <div className='content_left' >
                             <Pots />
                             <Transactions />
                         </div>
-                        
+
                         <div className='content_right' >
                             <Budgets />
                             <RecurringBills />

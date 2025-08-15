@@ -215,6 +215,8 @@ export default function SignupAndSingout() {
     function navigateToHome(token: string) {
 
         localStorage.setItem("token", JSON.stringify({ token: token }));
+        localStorage.removeItem("guest user");
+        localStorage.removeItem("user");
 
         toast.success(`${toggleUserOperation ? "Registrado" : "Logado"} com sucesso`);
 
@@ -224,16 +226,20 @@ export default function SignupAndSingout() {
 
     }
 
+    // no user
     function guestUser() {
 
         localStorage.setItem("guest user", JSON.stringify({
-            id: "id_guest_user",
-            login: "visitante@gmail.com",
-            password: "",
-            name: "Visitante",
-
-            role: "USER"
+            user: {
+                id: "id_guest_user",
+                login: "visitante@gmail.com",
+                password: "",
+                name: "Visitante",
+            }
         }));
+
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
 
         setTimeout(() => {
             navigate("/home", { replace: true });
@@ -288,6 +294,7 @@ export default function SignupAndSingout() {
                         />
 
                         <Input
+                            typeInput='password'
                             type={toggleShowPassword ? "password" : "text"}
                             label={toggleUserOperation ? 'Criar Senha' : 'Senha'}
                             value={password}

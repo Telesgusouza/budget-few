@@ -16,6 +16,8 @@ export const Li = styled.li<IProps>`
 
     overflow: hidden;
 
+    cursor: pointer;
+
     span {
         color: var(--grey_500);
     }

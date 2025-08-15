@@ -30,7 +30,7 @@
   
   --navy: #626070;
   --red: #c94736;
-  --purple: #826db0;
+  --dark_purple: #826db0;
 
   /* OTHER COLORS */
   --purple: #af81ba;
@@ -159,4 +159,10 @@ button {
   font-size: 12px;
   line-height: 150%;
   letter-spacing: 0px;
+}
+
+@media (max-width: 450px) {
+  .card {
+    padding: 24px 20px;
+  }
 }

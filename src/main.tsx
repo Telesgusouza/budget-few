@@ -1,7 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import RoutesApp from './routes/RoutesApp'
+import { Provider } from 'react-redux';
 
+import store from './config/redux/store';
+import RoutesApp from './routes/RoutesApp'
 
 import { ToastContainer } from 'react-toastify';
 
@@ -10,7 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RoutesApp />
-    <ToastContainer />
+    <Provider store={store} >
+
+      <RoutesApp />
+      <ToastContainer />
+
+    </Provider>
   </StrictMode>,
 )

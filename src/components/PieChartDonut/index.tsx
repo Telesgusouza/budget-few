@@ -1,10 +1,8 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import {
   PieChart,
-  Pie,
-  // Sector, 
+  Pie, 
   Cell,
-  // ResponsiveContainer 
 } from 'recharts';
 
 const data = [

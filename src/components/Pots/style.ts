@@ -1,8 +1,5 @@
 import styled from "styled-components";
 
-interface ILi {
-    color_sidebar: string;
-}
 
 export const Container = styled.article`
 overflow: hidden;
@@ -78,38 +75,5 @@ export const Grid = styled.div`
             margin-top: 20px;
             margin-left: 0;
         }
-    }
-`;
-
-export const Li = styled.li<ILi>`
-    display: flex;
-    flex-direction: column;
-
-    padding-left: 16px;
-    padding: 2px 16px;
-    position: relative;
-
-    min-height: 43px;
-
-    span {
-        color: var(--grey_500);
-    }
-
-    strong {
-        color: var(--grey_900);
-    }
-
-    &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 4px;
-        height: 100%;
-
-        border-radius: 8px;
-
-
-        background-color: ${props => props.color_sidebar};
     }
 `;

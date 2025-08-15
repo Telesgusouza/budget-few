@@ -19,21 +19,37 @@ export const Label = styled.label<iProps>`
 
         position: relative;
 
+
+    }
+
+    .password_input {
+        
         img {
             position: absolute;
             right: 20px;
 
             cursor: pointer;
         }
+
+        input {
+            padding-right: 50px;
+        }
+    }
+
+    .target_input {
+        img {
+            position: absolute;
+            left: 20px;
+        }
+
+        input {
+            padding-left: 46px;
+        }
     }
 
     input {
         width: 100%;
         padding: 12px 20px;
-
-        ${props => props.$pright === "password" && css`
-            padding-right: 50px;
-        `}
 
         border-radius: 8px;
         border: 1px solid var(--beige_500);

@@ -2,7 +2,7 @@ import * as Styled from './style';
 
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import baseurl from '../../../../baseurl';
@@ -18,12 +18,10 @@ interface IProps {
     close: boolean;
 }
 
-// 
-// 87e4011d-b320-4118-9067-114da6e81339
-
 export default function ModalPot({ onShow, close }: IProps) {
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const [potNameWrong, setPotNameWrong] = useState<boolean>(false);
     const [targetWrong, setTargetWrong] = useState<boolean>(false);
@@ -138,13 +136,6 @@ export default function ModalPot({ onShow, close }: IProps) {
 
         else {
 
-/*
-
-
-
-
-*/
-
             const tokenJson = localStorage.getItem("token");
 
             if (tokenJson) {
@@ -152,21 +143,18 @@ export default function ModalPot({ onShow, close }: IProps) {
                 try {
                     const token = JSON.parse(tokenJson);
 
-
-                    console.log();
-                    console.log(`${baseurl}/pot/${id}`);
+                    const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
 
                     await axios.put(`${baseurl}/pot/${id}`, {
                         title: potName,
                         description: potDescription,
-                        monthlyAmount: targetValue,
+                        monthlyAmount: monthlyAmount,
                         color: themeCurrent.color
                     }, {
                         headers: {
                             'Authorization': `Bearer ${token.token}`,
                             'Content-Type': 'application/json'
                         },
-                        validateStatus: status => status !== 403
                     });
 
                     toast.success("Editado com sucesso");
@@ -177,24 +165,29 @@ export default function ModalPot({ onShow, close }: IProps) {
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
 
-                        console.log(error)
-
                         if (error.response?.status === 403) {
                             // Trata erro específico de permissão
                             toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
                             return;
                         }
 
+                        if(error.response?.data.message == "pot not found") {
+                            toast.error("Não foi possivel achar o pote");
+                            toast.warn("Você será devolvido a página de Lita de potes");
+
+                            setTimeout(() => {
+                                navigate("/pots");
+                            }, 700);
+                            return;
+                        }
+
                         // Trata outros erros de resposta
                         toast.error(`Erro na requisição: ${error.response?.data}`);
                     } else {
-                        // Trata outros erros
+
                         toast.error('Erro ao processar a requisição');
                     }
                 }
-
-
-
             }
         }
     }

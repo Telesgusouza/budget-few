@@ -14,11 +14,12 @@ import InputAccordion from '../../InputAccordion';
 import Button from '../../Button';
 
 interface IProps {
+    modal: "add" | "edit"
     onShow: (show: boolean) => void;
     close: boolean;
 }
 
-export default function ModalPot({ onShow, close }: IProps) {
+export default function ModalPot({ onShow, close, modal }: IProps) {
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -112,6 +113,107 @@ export default function ModalPot({ onShow, close }: IProps) {
         onShow(false);
     }
 
+    async function editSubmit(token: string) {
+        
+
+        try {
+            // const token = JSON.parse(tokenJson);
+
+            const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
+
+            await axios.put(`${baseurl}/pot/${id}`, {
+                title: potName,
+                description: potDescription,
+                monthlyAmount: monthlyAmount,
+                color: themeCurrent.color
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            toast.success("Editado com sucesso");
+            setTimeout(() => {
+                showModal();
+            }, 700);
+
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+
+                if (error.response?.status === 403) {
+                    toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
+                    return;
+                }
+
+                if(error.response?.data.message == "pot not found") {
+                    toast.error("Não foi possivel achar o pote");
+                    toast.warn("Você será devolvido a página de Lita de potes");
+
+                    setTimeout(() => {
+                        navigate("/pots");
+                    }, 700);
+                    return;
+                }
+
+                // Trata outros erros de resposta
+                console.error("Erro de requisição, ", error.response?.data);
+                toast.error(`Erro na requisição, por favor tente mais tarde`);
+            } else {
+                console.error("Erro ao processar a requisição, ", error);
+                toast.error('Erro ao processar a requisição');
+            }
+        }
+    }
+
+    async function addSubmit(token: string) {
+        try {
+
+            const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
+
+            await axios.post(baseurl + "/pot", {
+
+                title: potName,
+                description: potDescription,
+                monthlyAmount: monthlyAmount,
+                color: themeCurrent.color
+
+            }, {
+                headers : {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            toast.success("Adicionado com sucesso");
+            setTimeout(() => {
+                showModal();
+            }, 700);
+
+        } catch (error) {
+
+            if(axios.isAxiosError(error)) {
+                if (error.response?.status === 403) {
+                    toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
+                    return;
+                }
+
+                if (error.response?.data.message === "pot already exists in list") {
+                    toast.error("Pote já existe em lista");
+                    setPotNameWrong(true);
+                    return;
+                }
+
+                console.error("Erro de requisição, ", error.response?.data)
+                toast.error(`Erro na requisição, tente mais tarde`);
+            } else {
+                console.error("Erro ao processar a requisição, ", error);
+                toast.error('Erro ao processar a requisição');
+            }
+
+        }
+    }
+
     async function submitForm(e: React.FormEvent) {
         e.preventDefault();
 
@@ -140,54 +242,15 @@ export default function ModalPot({ onShow, close }: IProps) {
 
             if (tokenJson) {
 
-                try {
-                    const token = JSON.parse(tokenJson);
+                const token: {token: string} = JSON.parse(tokenJson);
 
-                    const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
-
-                    await axios.put(`${baseurl}/pot/${id}`, {
-                        title: potName,
-                        description: potDescription,
-                        monthlyAmount: monthlyAmount,
-                        color: themeCurrent.color
-                    }, {
-                        headers: {
-                            'Authorization': `Bearer ${token.token}`,
-                            'Content-Type': 'application/json'
-                        },
-                    });
-
-                    toast.success("Editado com sucesso");
-                    setTimeout(() => {
-                        showModal();
-                    }, 700);
-
-                } catch (error) {
-                    if (axios.isAxiosError(error)) {
-
-                        if (error.response?.status === 403) {
-                            // Trata erro específico de permissão
-                            toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
-                            return;
-                        }
-
-                        if(error.response?.data.message == "pot not found") {
-                            toast.error("Não foi possivel achar o pote");
-                            toast.warn("Você será devolvido a página de Lita de potes");
-
-                            setTimeout(() => {
-                                navigate("/pots");
-                            }, 700);
-                            return;
-                        }
-
-                        // Trata outros erros de resposta
-                        toast.error(`Erro na requisição: ${error.response?.data}`);
-                    } else {
-
-                        toast.error('Erro ao processar a requisição');
-                    }
+                if (modal === "add") {
+                    await addSubmit(token.token);
+                } else if (modal === "edit") {
+                    await editSubmit(token.token);
                 }
+
+
             }
         }
     }
@@ -196,12 +259,14 @@ export default function ModalPot({ onShow, close }: IProps) {
         <Styled.Container show={close ? "view" : "hidden"} >
             <article className='card' >
                 <Styled.HeaderModal>
-                    <strong className='text_present_1' >Edite o Pote</strong>
+                    <strong className='text_present_1' >{modal == 'add' ? "Adicionar novo" : "Edite o"} Pote</strong>
                     <div className='text_present_5_bold' onClick={showModal} >X</div>
                 </Styled.HeaderModal>
 
                 <p className='text_present_4' >
-                    Se suas metas de economia mudarem, sinta-se à vontade para atualizar seus potes.
+                    {modal === 'add' 
+                    ? "Crie um fundo para definir metas de economia. Isso pode ajudar você a manter o controle enquanto economiza para compras especiais." 
+                    : "Se suas metas de economia mudarem, sinta-se à vontade para atualizar seus potes."}
                 </p>
 
                 <form onSubmit={submitForm} >
@@ -241,7 +306,7 @@ export default function ModalPot({ onShow, close }: IProps) {
                         updateCurrent={(color) => setThemeCurrent(color)}
                     />
 
-                    <Button type='submit' >Salvar Mudanças</Button>
+                    <Button type='submit' >{modal === "add" ? "Adicionar Pote" : "Salvar Mudanças"}</Button>
                 </form>
             </article>
         </Styled.Container>

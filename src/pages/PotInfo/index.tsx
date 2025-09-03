@@ -1,23 +1,35 @@
-import { useParams } from 'react-router-dom';
-import * as Styled from './style';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import * as Styled from './style';
+
 import TinyLine from '../../components/TinyLine';
 import Button from '../../components/Button';
 import ModalPot from '../../components/modals/ModalPot';
 
 export default function PotInfo() {
 
-
     const { idPot } = useParams();
 
+    const navigate = useNavigate();
+
     const [showModalPot, setShowModalPot] = useState<boolean>(true);
+
+    function backPage () {
+        navigate("/pots");
+    }
+
     return (
         <Styled.Container >
 
-            <ModalPot onShow={setShowModalPot} close={showModalPot} />
+            <ModalPot modal='add' onShow={setShowModalPot} close={showModalPot} />
 
-            <Styled.BackPage>
-                {/* // voltar a pagina anterior */}
+            <Styled.BackPage onClick={backPage} >
+
+                <span className='text_present_3' >
+                    Voltar
+                </span>
+
             </Styled.BackPage>
 
             <Styled.Content className='card' >
@@ -34,11 +46,15 @@ export default function PotInfo() {
                 <p className='text_present_4_bold' >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit aut nam necessitatibus ab accusamus voluptatibus quibusdam fuga porro aliquam, molestias dolorum voluptates! Ratione, omnis praesentium. Commodi optio eaque reprehenderit molestias?</p>
 
                 <div className='container_btns' >
-                    <Button>ola mundo</Button>
-                    <Button detroy={true} >ola mundo</Button>
+                    <Button>Edite</Button>
+                    <Button detroy={true} >Delete</Button>
                 </div>
 
                 {/*
+
+                withdraw from 'Savings'
+
+                Add to 'Savings'
                 
                 // description
 

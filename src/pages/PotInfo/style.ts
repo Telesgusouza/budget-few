@@ -12,7 +12,38 @@ export const Container = styled.div`
     align-items: center;
 `;
 
-export const BackPage = styled.div``;
+export const BackPage = styled.div`
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 26px;
+
+    span {
+        padding: 0 4px;
+        color: var(--grey_500);
+        
+        cursor: pointer;
+
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+
+            background-color: var(--grey_500);
+
+            transition: all .2s ease-in-out;
+        }
+
+        &:hover::before {
+            left: 0%;
+            width: 100%;
+        }
+    }
+`;
 
 export const Content = styled.section`
     width: 100%;

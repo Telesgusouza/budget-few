@@ -233,9 +233,9 @@ export default function SignupAndSingout() {
             user: {
                 id: "id_guest_user",
                 login: "visitante@gmail.com",
-                password: "",
                 name: "Visitante",
-            }
+            },
+            pots: [],
         }));
 
         localStorage.removeItem("user");

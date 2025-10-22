@@ -6,10 +6,16 @@ export const Container = styled.div`
     max-width: 100vw;
     min-height: 100vh;
 
+    padding: 20px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: 500px) {
+        padding: 20px 12px;
+    }
 `;
 
 export const BackPage = styled.div`
@@ -55,6 +61,8 @@ export const Content = styled.section`
 
     span {
         color: var(--grey_700);
+        text-align: end;
+        margin-left: 8px;
     }
 
     div {
@@ -66,6 +74,7 @@ export const Content = styled.section`
 
     p {
         color: var(--grey_700);
+        margin-bottom: 20px;
     }
 
     .container_btns {
@@ -74,10 +83,64 @@ export const Content = styled.section`
         grid-gap: 16px;
 
         margin-top: 30px;
+        
+        grid-template-rows: auto auto;
+
+        .edit-btn {
+            grid-row: 1;
+            grid-column: 1;
+        }
+
+        .del-btn {
+            grid-row: 1;
+            grid-column: 2;
+        }
+
+        .add-btn {
+            grid-row: 2;
+            grid-column: 1 / -1;
+        }
+
+
+
     }
+
+    .right {
+            float: right;
+        }
 
     button {
         width: 100%;
+    }
+
+    .input_accordion {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+
+        margin-top: 15px;
+    }
+
+    @media (max-width: 500px) {
+        .container_btns {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+        
+            .edit-btn { 
+                grid-row: 1;
+                grid-column: 1;
+            }
+
+            .del-btn { 
+                grid-row: 3;
+                grid-column: 1;
+            }
+
+            .add-btn {
+                grid-row: 2;
+                grid-column: 1;
+            }
+        }
     }
 `;
 
@@ -89,4 +152,13 @@ export const ContainerGraphic = styled.div`
 
     position: relative;
 
+`;
+
+export const ContentError = styled.div`
+    width: 100%;
+    max-width: 600px;
+
+    p {
+        margin-top: 10px;
+    }
 `;

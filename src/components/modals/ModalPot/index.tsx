@@ -6,12 +6,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import baseurl from '../../../../baseurl';
-import { ITheme } from '../../../config/interfaces';
 import colors from '../../../config/colors';
 
 import Input from '../../Input';
 import InputAccordion from '../../InputAccordion';
 import Button from '../../Button';
+import { IGuestUser, IOptionsInputAccordion } from '../../../config/interfaces';
+import { guestUserAddPot, guestUserEditPot } from '../../../config/utilsGuestUser';
 
 interface IProps {
     modal: "add" | "edit"
@@ -21,7 +22,7 @@ interface IProps {
 
 export default function ModalPot({ onShow, close, modal }: IProps) {
 
-    const { id } = useParams();
+    const { idPot } = useParams();
     const navigate = useNavigate();
 
     const [potNameWrong, setPotNameWrong] = useState<boolean>(false);
@@ -32,8 +33,8 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     const [potDescription, setPotDescription] = useState<string>("");
     const [targetValue, setTargetValue] = useState<string>('0,00');
 
-    const [themeCurrent, setThemeCurrent] = useState<ITheme>(colors[0]);
-    const [listTheme] = useState<ITheme[]>(colors);
+    const [themeCurrent, setThemeCurrent] = useState<IOptionsInputAccordion>(colors[0]);
+    const [listTheme] = useState<IOptionsInputAccordion[]>(colors);
 
     useEffect(() => {
         if (potNameWrong) {
@@ -114,14 +115,12 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     }
 
     async function editSubmit(token: string) {
-        
 
         try {
-            // const token = JSON.parse(tokenJson);
 
-            const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
+            const monthlyAmount = parseFloat(targetValue.replace(",", "."));
 
-            await axios.put(`${baseurl}/pot/${id}`, {
+            await axios.put(`${baseurl}/pot/${idPot}`, {
                 title: potName,
                 description: potDescription,
                 monthlyAmount: monthlyAmount,
@@ -142,11 +141,16 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             if (axios.isAxiosError(error)) {
 
                 if (error.response?.status === 403) {
-                    toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
-                    return;
+                    toast.warn("reconecte-se em sua conta");
+
+                    setTimeout(() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        navigate("/");
+                    }, 700);
                 }
 
-                if(error.response?.data.message == "pot not found") {
+                if (error.response?.data.message == "pot not found") {
                     toast.error("Não foi possivel achar o pote");
                     toast.warn("Você será devolvido a página de Lita de potes");
 
@@ -158,10 +162,10 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                 // Trata outros erros de resposta
                 console.error("Erro de requisição, ", error.response?.data);
-                toast.error(`Erro na requisição, por favor tente mais tarde`);
+                toast.error(`Erro ao editar, por favor tente mais tarde`);
             } else {
                 console.error("Erro ao processar a requisição, ", error);
-                toast.error('Erro ao processar a requisição');
+                toast.error('Erro ao processar a edição, por favor tente novamente');
             }
         }
     }
@@ -169,7 +173,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     async function addSubmit(token: string) {
         try {
 
-            const monthlyAmount = parseFloat(targetValue.replace(",", ".")); 
+            const monthlyAmount = parseFloat(targetValue.replace(",", "."));
 
             await axios.post(baseurl + "/pot", {
 
@@ -179,7 +183,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                 color: themeCurrent.color
 
             }, {
-                headers : {
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
@@ -192,7 +196,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
         } catch (error) {
 
-            if(axios.isAxiosError(error)) {
+            if (axios.isAxiosError(error)) {
                 if (error.response?.status === 403) {
                     toast.error('Acesso não autorizado. Por favor, verifique suas credenciais.');
                     return;
@@ -242,15 +246,66 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
             if (tokenJson) {
 
-                const token: {token: string} = JSON.parse(tokenJson);
+                const token: { token: string } = JSON.parse(tokenJson);
 
                 if (modal === "add") {
                     await addSubmit(token.token);
                 } else if (modal === "edit") {
                     await editSubmit(token.token);
                 }
+            } else {
+                const guestUserJson = localStorage.getItem("guest user");
 
+                if (guestUserJson) {
 
+                    const guestUser: IGuestUser = JSON.parse(guestUserJson);
+
+                    const monthlyAmount = parseFloat(targetValue.replace(",", "."));
+
+                    if (modal === "add") {
+
+                        guestUserAddPot({
+                            title: potName,
+                            description: potDescription,
+                            id: (Math.random()).toString().split(".")[1],
+                            color: themeCurrent.color ? themeCurrent.color : "#009929",
+                            monthlyAmount: monthlyAmount
+                        }, guestUser);
+
+                        toast.success("Criado com sucesso");
+                        setTimeout(() => {
+                            showModal();
+                        }, 700);
+
+                    } else {
+                        if (idPot) {
+                            const editSuccess = guestUserEditPot({
+                                title: potName,
+                                description: potDescription,
+                                id: idPot,
+                                color: themeCurrent.color ? themeCurrent.color : "#009929",
+                                monthlyAmount: monthlyAmount
+                            }, guestUser, idPot);
+
+                            console.log("Estamos aqui")
+
+                            if (editSuccess) {
+                                toast.success("Editado com sucesso");
+                                setTimeout(() => {
+                                    showModal();
+                                }, 700);
+                            }
+                        } else {
+                            toast.warn("Não a um id de objeto")
+                            return;
+                        }
+
+                    }
+
+                    // lista de potes
+                    // ele existe
+                    // voltar
+                }
             }
         }
     }
@@ -264,9 +319,9 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                 </Styled.HeaderModal>
 
                 <p className='text_present_4' >
-                    {modal === 'add' 
-                    ? "Crie um fundo para definir metas de economia. Isso pode ajudar você a manter o controle enquanto economiza para compras especiais." 
-                    : "Se suas metas de economia mudarem, sinta-se à vontade para atualizar seus potes."}
+                    {modal === 'add'
+                        ? "Crie um fundo para definir metas de economia. Isso pode ajudar você a manter o controle enquanto economiza para compras especiais."
+                        : "Se suas metas de economia mudarem, sinta-se à vontade para atualizar seus potes."}
                 </p>
 
                 <form onSubmit={submitForm} >

@@ -14,7 +14,7 @@ export default function RoutesApp() {
                 <Route path="/home" element={<> <Home /> </>} />
                 <Route path="/change_password" element={ <ChangePassword/> } />
                 <Route path="/pots" element={<> <Pots /> </>} />
-                <Route path="/pot_info/:id" element={<> <PotInfo /> </>} />
+                <Route path="/pot_info/:idPot" element={<> <PotInfo /> </>} />
             </Routes>
         </BrowserRouter>
     );

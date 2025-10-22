@@ -1,3 +1,4 @@
+
 export interface IPot {
     id: string;
     title: string;
@@ -24,8 +25,30 @@ export interface RootState {
     user: IUserState;
 }
 
-export interface ITheme {
+export interface IOptionsInputAccordion {
+    option?: string;
     name: string,
-    color: string,
+    color?: string,
     use: boolean
+}
+
+export interface ITinyLine {
+    name: string,
+    R$: number
+}
+
+export interface IUpdate {
+    id: string;
+    date: string;
+    value: number;
+}
+
+export interface IGuestUser {
+    user: {
+        id: string,
+        login: string,
+        name: string,
+    }
+
+    pots: {updates: IUpdate[], pot: IPot}[]
 }

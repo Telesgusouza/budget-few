@@ -42,6 +42,8 @@ export const Container = styled.label<IProps>`
         background-color: var(--white);
 
         transition: all .14s ease;
+
+        z-index: 20;
         
         ${props => props.$show === "show" 
         ? css`
@@ -65,7 +67,7 @@ export const Content = styled.div<IContent>`
     justify-content: space-between;
     align-items: center;
 
-    padding: 12px 20px;
+    padding: 8px 15px;
 
     border: 1px solid var(--beige_500);
     border-radius: 8px;
@@ -83,6 +85,7 @@ export const Content = styled.div<IContent>`
     }
 
     img {
+        margin-left: 15px;
         rotate: ${props => props.$directionArrow == "down" ? 180 : 0}deg;
 
         transition: rotate .2s ease;

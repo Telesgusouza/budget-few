@@ -1,11 +1,11 @@
 import { toast } from "react-toastify";
-import { IGuestUser, IPot, IUpdate } from "./interfaces";
+import { IGuestPot, IGuestUser, IPot, IUpdate } from "./interfaces";
 import { formatDate } from "./utils";
 
 export function guestUserAddPot(data: IPot, guest: IGuestUser) {
 
-    const newPot: { updates: IUpdate[], pot: IPot } =
-        { updates: [], pot: data };
+    const newPot: IGuestPot =
+        { updates: [], pot: data, lastUpdate:  formatDate((new Date()).toString())};
 
     guest.pots.push(newPot);
 
@@ -20,6 +20,7 @@ export function guestUserEditPot(data: IPot, guest: IGuestUser, id: string) {
 
     if (index != -1) {
         guest.pots[index].pot = data;
+        guest.pots[index].lastUpdate = formatDate((new Date()).toString());
 
         savePot(data.monthlyAmount, id, guest);
 
@@ -37,7 +38,7 @@ function savePot(value: number, id: string, guest: IGuestUser) {
 
     const date: IUpdate = {
         id: "date" + (Math.random()).toString().split(".")[1],
-        date: formatDate(new Date()),
+        date: formatDate((new Date().toString())),
         value: value,
     };
 

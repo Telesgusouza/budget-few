@@ -3,6 +3,7 @@ import { ITinyLine } from '../../config/interfaces';
 
 export default function TinyLine(
   { data }: { data: ITinyLine[] }
+  
 ) {
 
   return (
@@ -14,8 +15,6 @@ export default function TinyLine(
         width={300}
         height={100}
         data={data}>
-
-        {/*  */}
 
         <CartesianGrid strokeDasharray="3 3" />
 

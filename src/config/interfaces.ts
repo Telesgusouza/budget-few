@@ -43,6 +43,8 @@ export interface IUpdate {
     value: number;
 }
 
+
+
 export interface IGuestUser {
     user: {
         id: string,
@@ -50,5 +52,11 @@ export interface IGuestUser {
         name: string,
     }
 
-    pots: {updates: IUpdate[], pot: IPot}[]
+    pots: IGuestPot[]
+}
+
+export interface IGuestPot {
+    updates: IUpdate[];
+    pot: IPot; 
+    lastUpdate: string; 
 }

@@ -6,7 +6,7 @@ export function formatNumber(number: number): string {
     }).format(number);
 }
 
-export function formatDate(dateString: string | Date): string {
+export function formatDate(dateString: string): string {
     const date = new Date(dateString);
     
     const dia = date.getDate().toString().padStart(2, '0');

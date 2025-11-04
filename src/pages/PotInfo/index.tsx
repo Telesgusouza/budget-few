@@ -11,7 +11,7 @@ import InputAccordion from '../../components/InputAccordion';
 
 import axios from 'axios';
 import baseurl from '../../../baseurl';
-import { IOptionsInputAccordion, IPot, ITinyLine } from '../../config/interfaces';
+import { IGuestUser, IOptionsInputAccordion, IPot, ITinyLine, IUpdate } from '../../config/interfaces';
 import { formatDate, formatNumber } from '../../config/utils';
 
 import period from '../../config/period';
@@ -28,14 +28,13 @@ export default function PotInfo() {
     const [listOfPeriods] = useState<IOptionsInputAccordion[]>(period);
     const [currentPeriod, setCurrentPeriod] = useState<IOptionsInputAccordion>(period[0]);
 
+    const [showModalPot, setShowModalPot] = useState<boolean>(true);
+
     const navigate = useNavigate();
 
     const ModalPot = lazy(() => import('../../components/modals/ModalPot'));
 
     const { idPot } = useParams();
-
-
-    const [showModalPot, setShowModalPot] = useState<boolean>(true);
 
     useEffect(() => {
 
@@ -60,7 +59,7 @@ export default function PotInfo() {
 
                     const field = request.data;
 
-                    setLastDate(field.lastUpdate);
+                    setLastDate(formatDate(field.lastUpdate));
 
                     setCurrent({
                         id: idPot + "",
@@ -113,8 +112,16 @@ export default function PotInfo() {
                         userErrorResponse("Erro desconhecido tentei novamente mais tarde");
                     }
                 }
-            } else {
-                console.log("Está tudo ok por aqui");
+            } else if (!jsonToken && guestUserJson) {
+                const guestUser: IGuestUser = JSON.parse(guestUserJson);
+                const index = guestUser.pots.findIndex(item => item.pot.id === idPot);
+
+                const updates = guestUser.pots[index].updates;
+                chartDataFormat(updates);
+
+                setCurrent(guestUser.pots[index].pot);
+                setLastDate(guestUser.pots[index].lastUpdate);
+
             }
 
         }
@@ -149,18 +156,7 @@ export default function PotInfo() {
                 });
 
                 const listFields = request.data;
-
-                const list: ITinyLine[] = [];
-
-                for (let i = 1; i <= listFields.length; i++) {
-
-                    list.push({
-                        name: formatDate(listFields[i - 1].date),
-                        R$: listFields[i - 1].value,
-                    });
-                }
-
-                setUpdateList(list);
+                chartDataFormat(listFields);
 
             } catch (error) {
                 setErrorInRequest(true);
@@ -200,6 +196,20 @@ export default function PotInfo() {
         getListUpdate();
     }
 
+    function chartDataFormat(updates: IUpdate[]) {
+        const list: ITinyLine[] = [];
+
+        for (let i = 1; i <= updates.length; i++) {
+
+            list.push({
+                name: updates[i - 1].date,
+                R$: updates[i - 1].value,
+            });
+        }
+
+        setUpdateList(list);
+    }
+
     function backPage() {
         navigate("/pots");
     }
@@ -232,7 +242,7 @@ export default function PotInfo() {
                                 current !== undefined ? (
                                     <>
                                         <h1 className='text_present_1 see_text' >{current.title}</h1>
-                                        <span className='text_present_5_bold' >Ultima atualização {lastDate !== undefined && formatDate(lastDate)}</span>
+                                        <span className='text_present_5_bold' >Ultima atualização {lastDate !== undefined && lastDate}</span>
                                     </>
                                 ) : (
                                     <>

@@ -3,9 +3,9 @@ import * as Styled from './styled.ts';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import eyeSlashImage from '../../assets/icons/eye-slash.png';
-import eyeImage from '../../assets/icons/eye.png';
-import dollarSignimage from '../../assets/icons/dollar-sign.svg';
+import eyeSlashImage from '../../../assets/icons/eye-slash.png';
+import eyeImage from '../../../assets/icons/eye.png';
+import dollarSignimage from '../../../assets/icons/dollar-sign.svg';
 
 interface IInput {
     type?: "text" | "password" | "email" | "number";
@@ -14,8 +14,8 @@ interface IInput {
     wrong: boolean;
 
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; // 
-    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void; // 
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; 
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void; 
 
     typeInput?: "basic" | "target" | "password";
     onToggleShowPassword?: (show: boolean) => void;

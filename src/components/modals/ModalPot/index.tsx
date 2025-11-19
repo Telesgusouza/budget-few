@@ -8,8 +8,8 @@ import axios from 'axios';
 import baseurl from '../../../../baseurl';
 import colors from '../../../config/colors';
 
-import Input from '../../Input';
-import InputAccordion from '../../InputAccordion';
+import Input from '../../Inputs/Input';
+import InputAccordion from '../../Inputs/InputAccordion';
 import Button from '../../Button';
 import { IGuestUser, IOptionsInputAccordion } from '../../../config/interfaces';
 import { guestUserAddPot, guestUserEditPot } from '../../../config/utilsGuestUser';
@@ -20,6 +20,12 @@ interface IProps {
     close: boolean;
 }
 
+/*
+
+    depois testar o editar
+
+*/
+
 export default function ModalPot({ onShow, close, modal }: IProps) {
 
     const { idPot } = useParams();
@@ -28,13 +34,17 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     const [potNameWrong, setPotNameWrong] = useState<boolean>(false);
     const [targetWrong, setTargetWrong] = useState<boolean>(false);
     const [descriptionWrong, setDescriptionWrong] = useState<boolean>(false);
+    const [initialValueWrong, setInitialValueWrong] = useState<boolean>(false);
 
     const [potName, setPotName] = useState<string>("");
     const [potDescription, setPotDescription] = useState<string>("");
     const [targetValue, setTargetValue] = useState<string>('0,00');
+    const [initialValue, setInitialValue] = useState<string>('0,00');
 
     const [themeCurrent, setThemeCurrent] = useState<IOptionsInputAccordion>(colors[0]);
     const [listTheme] = useState<IOptionsInputAccordion[]>(colors);
+
+    const [buttonRelease, setButtonRelease] = useState<boolean>(false);
 
     useEffect(() => {
         if (potNameWrong) {
@@ -54,6 +64,12 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
         }
     }, [potDescription]);
 
+    useEffect(() => {
+        if (initialValue) {
+            setInitialValueWrong(false);
+        }
+    }, [initialValue]);
+
 
     function validationInput(value: string) {
 
@@ -63,21 +79,35 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
         return regex.test(value);
     }
 
-    function handleInputTarget(e: React.ChangeEvent<HTMLInputElement>) {
+    function dealingWithValueInputs(e: React.ChangeEvent<HTMLInputElement>, type: "target" | "goal") {
         const value = e.target.value;
 
         if (validationInput(value)) {
-            setTargetValue(value);
+
+            if (type === "target") {
+                setTargetValue(value);
+            } else if (type === "goal") {
+                setInitialValue(value);
+            }
+            
         }
     }
 
-    function takeTheFocus() {
+    function takeTheFocus(type: "target" | "goal") {
 
-        setTargetValue("")
+        if(type === "target") {
+            setTargetValue("")    
+        } else if (type === "goal") {
+            setInitialValue("");
+        }
 
-        const separateValues = targetValue.split(",");
+        const separateValues = (type === "target" 
+            ? targetValue
+            : initialValue).split(",");
 
-        if (targetValue.split(",").length < 2) {
+
+
+        if (targetValue.split(",").length < 2 || initialValue.split(",").length < 2) {
             separateValues.push("00");
         }
 
@@ -100,13 +130,22 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             }
         }
 
-        setTargetValue(separateValues.join())
+        if(type === "target") {
+            setTargetValue(separateValues.join());    
+        } else if (type === "goal") {
+            setInitialValue(separateValues.join());
+        }
+
     }
 
-    function cleanInput() {
+    function cleanInput(type: "target" | "goal") {
 
-        if (targetValue === "0,00") {
+        if (type === "target" && targetValue === "0,00") {
             setTargetValue("");
+        }
+
+        if (type === "goal" && targetValue === "0,00") {
+            setInitialValue("");
         }
     }
 
@@ -118,13 +157,17 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
         try {
 
-            const monthlyAmount = parseFloat(targetValue.replace(",", "."));
+            const target = parseFloat(targetValue.replace(",", "."));
+            const earned = parseFloat(initialValue.replace(",", "."));
 
             await axios.put(`${baseurl}/pot/${idPot}`, {
+               
                 title: potName,
                 description: potDescription,
-                monthlyAmount: monthlyAmount,
+                earnedValue: earned,
+                goal: target,
                 color: themeCurrent.color
+
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -173,13 +216,15 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     async function addSubmit(token: string) {
         try {
 
-            const monthlyAmount = parseFloat(targetValue.replace(",", "."));
+            const target = parseFloat(targetValue.replace(",", "."));
+            const earned = parseFloat(initialValue.replace(",", "."));
 
             await axios.post(baseurl + "/pot", {
 
                 title: potName,
                 description: potDescription,
-                monthlyAmount: monthlyAmount,
+                earnedValue: earned,
+                goal: target,
                 color: themeCurrent.color
 
             }, {
@@ -221,6 +266,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     async function submitForm(e: React.FormEvent) {
         e.preventDefault();
 
+        setButtonRelease(true);
         const replaceValueTarget = parseFloat(targetValue.replace(",", "."));
 
         if (potName.length < 3 || potName.length > 30) {
@@ -235,8 +281,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             toast.warn("descrição muito curta");
             setDescriptionWrong(true);
         } if (replaceValueTarget <= 0) {
-
-            toast.warn("Valor muito baixo");
+            toast.warn("Meta não pode ser zero");
             setTargetWrong(true);
         }
 
@@ -260,16 +305,22 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                     const guestUser: IGuestUser = JSON.parse(guestUserJson);
 
-                    const monthlyAmount = parseFloat(targetValue.replace(",", "."));
+                    const target = parseFloat(targetValue.replace(",", "."));
+                    const earned = parseFloat(initialValue.replace(",", "."));
 
                     if (modal === "add") {
 
+
                         guestUserAddPot({
+                            id: (Math.random()).toString().split(".")[1],
+                            
                             title: potName,
                             description: potDescription,
-                            id: (Math.random()).toString().split(".")[1],
+                            
+                            earnedValue: earned,
+                            goal: target,
+
                             color: themeCurrent.color ? themeCurrent.color : "#009929",
-                            monthlyAmount: monthlyAmount
                         }, guestUser);
 
                         toast.success("Criado com sucesso");
@@ -280,14 +331,16 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                     } else {
                         if (idPot) {
                             const editSuccess = guestUserEditPot({
+                                id: idPot,
+
                                 title: potName,
                                 description: potDescription,
-                                id: idPot,
-                                color: themeCurrent.color ? themeCurrent.color : "#009929",
-                                monthlyAmount: monthlyAmount
-                            }, guestUser, idPot);
+                                
+                                earnedValue: earned,
+                                goal: target,
 
-                            console.log("Estamos aqui")
+                                color: themeCurrent.color ? themeCurrent.color : "#009929",
+                            }, guestUser, idPot);
 
                             if (editSuccess) {
                                 toast.success("Editado com sucesso");
@@ -308,6 +361,8 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                 }
             }
         }
+
+        setButtonRelease(false);
     }
 
     return (
@@ -345,13 +400,27 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                     <Input
                         label='Objetivo'
 
-                        onChange={(e) => handleInputTarget(e)}
-                        onBlur={takeTheFocus}
-                        onFocus={cleanInput}
+                        onChange={(e) => dealingWithValueInputs(e, "target")}
+                        onBlur={() =>takeTheFocus('target')}
+                        onFocus={() => cleanInput('target')}
 
                         value={targetValue}
                         wrong={targetWrong}
                         typeInput='target'
+                    />
+
+                    <Input 
+                    
+                    label='Valor inicial'
+
+                    onChange={(e) => dealingWithValueInputs(e, "goal")}
+                    onBlur={() =>takeTheFocus('goal')}
+                    onFocus={() => cleanInput('goal')}
+
+                    value={initialValue}
+                    wrong={initialValueWrong}
+                    
+                    typeInput='target'
                     />
 
                     <InputAccordion
@@ -361,7 +430,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                         updateCurrent={(color) => setThemeCurrent(color)}
                     />
 
-                    <Button type='submit' >{modal === "add" ? "Adicionar Pote" : "Salvar Mudanças"}</Button>
+                    <Button type='submit' disabled={buttonRelease} >{modal === "add" ? "Adicionar Pote" : "Salvar Mudanças"}</Button>
                 </form>
             </article>
         </Styled.Container>

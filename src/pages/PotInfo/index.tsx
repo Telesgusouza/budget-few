@@ -7,7 +7,7 @@ import * as Styled from './style';
 import TinyLine from '../../components/TinyLine';
 import Button from '../../components/Button';
 import ModalOperation from '../../components/modals/ModalOperation';
-import InputAccordion from '../../components/InputAccordion';
+import InputAccordion from '../../components/Inputs/InputAccordion';
 
 import axios from 'axios';
 import baseurl from '../../../baseurl';
@@ -46,9 +46,8 @@ export default function PotInfo() {
             setErrorInRequest(false);
 
             if (jsonToken && !guestUserJson) {
-
-
                 const token = JSON.parse(jsonToken);
+
                 try {
                     const request = await axios.get(`${baseurl}/pot/${idPot}`, {
                         headers: {

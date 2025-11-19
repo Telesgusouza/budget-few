@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface IBar {
+    percentage: number;
+}
+
 export const Container = styled.div`
     display: flex;
     flex-direction: row;
@@ -16,7 +20,7 @@ export const Container = styled.div`
 
         margin: 0 auto;
 
-        padding: 0 40px;
+        padding: 0 40px 40px 40px;
     }
 
     header {
@@ -25,8 +29,6 @@ export const Container = styled.div`
         justify-content: space-between;
 
         padding: 32px 0;
-
-        margin-bottom: 16px;
     }
 
     h1 {
@@ -86,6 +88,32 @@ export const Container = styled.div`
         grid-template-columns: 1fr 1fr;
         grid-gap: 16px;
     }
+
+    .pagination {
+        width: 100%;
+        padding-top: 30px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    @media (max-width: 1000px) {
+        .listPots {
+            grid-template-columns: 1fr;
+        }
+
+        section {
+            margin-bottom: 110px;
+        }
+    }
+
+    @media (max-width: 550px) {
+
+        section {
+            padding: 0 16px;
+        }   
+    }
 `;
 
 export const PotChartAndBar = styled.div`
@@ -104,7 +132,7 @@ export const PotChartAndBar = styled.div`
     }
 `;
 
-export const Bar = styled.div`
+export const Bar = styled.div<IBar>`
     min-width: 100%;
     padding: 4px;
     margin: 16px 0 13px 0;
@@ -120,7 +148,7 @@ export const Bar = styled.div`
         top: 0;
         left: 0;
         min-height: 100%;
-        width: 30%;
+        width: ${props => props.percentage}%;
 
         border-radius: 4px;
 

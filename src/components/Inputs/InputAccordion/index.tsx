@@ -1,7 +1,7 @@
 import * as Styled from './style';
-import caretUpImage from '../../assets/icons/caret-up.svg';
+import caretUpImage from '../../../assets/icons/caret-up.svg';
 import { useEffect, useState } from 'react';
-import { IOptionsInputAccordion } from '../../config/interfaces';
+import { IOptionsInputAccordion } from '../../../config/interfaces';
 import { toast } from 'react-toastify';
 
 interface IProps {

@@ -15,3 +15,8 @@ export function formatDate(dateString: string): string {
     
     return `${dia}/${mes}/${ano}`;
 }
+
+export function calculatePercentage(earned: number, goal: number): number {
+    if (goal === 0) return 0;
+    return Number(((earned / goal) * 100).toFixed(2));
+  };

@@ -3,7 +3,10 @@ export interface IPot {
     id: string;
     title: string;
     description?: string;
-    monthlyAmount: number;
+
+    earnedValue: number;
+    goal: number;
+
     color: string;
 }
 

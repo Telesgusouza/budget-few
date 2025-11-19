@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import * as Styled from './style';
 import baseurl from '../../../baseurl';
 
-import Input from '../../components/Input';
+import Input from '../../components/Inputs/Input';
 import Button from '../../components/Button';
 
 import logoimage from '../../assets/imgs/Logo.svg';

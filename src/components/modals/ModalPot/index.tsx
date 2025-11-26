@@ -366,12 +366,16 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     }
 
     return (
-        <Styled.Container show={close ? "view" : "hidden"} >
+        <Styled.Container 
+        className='background_modal'
+        show={close ? "view" : "hidden"} >
             <article className='card' >
-                <Styled.HeaderModal>
+                {/* <Styled.HeaderModal> */}
+                <div className="header_modal">
                     <strong className='text_present_1' >{modal == 'add' ? "Adicionar novo" : "Edite o"} Pote</strong>
-                    <div className='text_present_5_bold' onClick={showModal} >X</div>
-                </Styled.HeaderModal>
+                    <span className='text_present_5_bold' onClick={showModal} >X</span>
+                </div>
+                {/* </Styled.HeaderModal> */}
 
                 <p className='text_present_4' >
                     {modal === 'add'
@@ -406,7 +410,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                         value={targetValue}
                         wrong={targetWrong}
-                        typeInput='target'
+                        type='target'
                     />
 
                     <Input 
@@ -420,7 +424,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                     value={initialValue}
                     wrong={initialValueWrong}
                     
-                    typeInput='target'
+                    type='target'
                     />
 
                     <InputAccordion

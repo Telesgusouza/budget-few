@@ -8,7 +8,7 @@ import eyeImage from '../../../assets/icons/eye.png';
 import dollarSignimage from '../../../assets/icons/dollar-sign.svg';
 
 interface IInput {
-    type?: "text" | "password" | "email" | "number";
+    type?: "text" | "password" | "email" | "number" | "target";
     label: string;
     value: string | number;
     wrong: boolean;
@@ -17,7 +17,6 @@ interface IInput {
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; 
     onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void; 
 
-    typeInput?: "basic" | "target" | "password";
     onToggleShowPassword?: (show: boolean) => void;
 }
 
@@ -32,7 +31,7 @@ export default function Input({
 
     onToggleShowPassword,
     wrong = false,
-    typeInput = "basic"
+    // typeInput = "basic"
 }: IInput) {
 
     const [showPassword, setShowPassword] = useState(false);
@@ -59,10 +58,12 @@ export default function Input({
             <span className='text_present_5_bold' >{label}</span>
 
             <div
-                className={typeInput === "target" ? 'target_input' : 'password_input'}
+                className={
+                    type === "target" ? 'target_input' :
+                    type === "password" ? 'password_input' : ""}
             >
 
-                {typeInput === "target" && (
+                {type === "target" && (
                     <>
                         <img
                             src={dollarSignimage}

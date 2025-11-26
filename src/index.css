@@ -126,6 +126,46 @@ button {
   animation: isLoading 1s linear infinite;
 }
 
+.background_modal {
+  width: 100%;
+  height: 100%;
+
+  position: fixed;
+  z-index: 999;
+
+  padding: 20px;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.header_modal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  grid-gap: 25px;
+
+}
+
+
+.header_modal span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 25px;
+  height: 25px;
+  border: 2px solid var(--grey_500);
+  border-radius: 50%;
+  color: var(--grey_500);
+
+  cursor: pointer;
+}
+
+.header_modal strong {
+  color: var(--grey_900);
+}
+
 /* TYPOGRAPHY */
 
 .text_present_1 {

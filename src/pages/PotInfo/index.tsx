@@ -6,7 +6,7 @@ import * as Styled from './style';
 
 import TinyLine from '../../components/TinyLine';
 import Button from '../../components/Button';
-import ModalOperation from '../../components/modals/ModalOperation';
+// import ModalOperation from '../../components/modals/ModalOperation';
 import InputAccordion from '../../components/Inputs/InputAccordion';
 
 import axios from 'axios';
@@ -223,7 +223,6 @@ export default function PotInfo() {
                         <ModalPot modal='edit' onShow={setShowModalPot} close={showModalPot} />
                     </Suspense>
 
-                    <ModalOperation />
 
                     <Styled.BackPage onClick={backPage} >
 

@@ -10,6 +10,8 @@ import baseurl from '../../../baseurl';
 import PaginationInput from '../../components/Inputs/PaginationInput';
 import { IPot } from '../../config/interfaces';
 import { calculatePercentage, formatNumber } from '../../config/utils';
+import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
+// import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
 
 /*
 
@@ -90,7 +92,12 @@ export default function Pots() {
     return (
         <Styled.Container>
 
-            <ModalPot close={viewModal} modal='add' onShow={() => setViewModal(viewModal)} />
+            <ModalPot
+                close={viewModal}
+                modal='add'
+                onShow={() => setViewModal(viewModal)} />
+
+            <WithdrawOrAdd />
 
             <Menu />
 
@@ -103,8 +110,44 @@ export default function Pots() {
 
                 <ul className='listPots' >
 
+{/* 
+                <li className='card' >
+                            <div className='between' >
 
+                                <h2 className='text_present_2' >pot.title</h2>
 
+                                <div className="threePoints">
+                                    <div />
+                                    <div />
+                                    <div />
+                                </div>
+
+                            </div>
+
+                            <Styled.PotChartAndBar>
+
+                                <div >
+                                    <span className='text_present_4' >Total salvo</span>
+                                    <strong className='text_present_1' >R$10</strong>
+                                </div>
+
+                                <Styled.Bar
+                                    percentage={Number(`${calculatePercentage(10, 100)}`)}
+                                />
+
+                                <div>
+                                    <span className='text_present_5_bold' >10%</span>
+                                    <span className='text_present_5' >Meta de R$1000</span>
+                                </div>
+
+                            </Styled.PotChartAndBar>
+
+                            <div className="containerBtn">
+                                <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
+                                <Button order='secondary' >Retirar</Button>
+                            </div>
+
+                        </li> */}
 
                     {listPots.length > 0 ? listPots.map((pot: IPot) => (
                         <li className='card' key={pot.id} >
@@ -127,9 +170,9 @@ export default function Pots() {
                                     <strong className='text_present_1' >R${formatNumber(pot.earnedValue)}</strong>
                                 </div>
 
-                                <Styled.Bar 
-                                    percentage={Number(`${calculatePercentage(pot.earnedValue, pot.goal)}`)} 
-                                    />
+                                <Styled.Bar
+                                    percentage={Number(`${calculatePercentage(pot.earnedValue, pot.goal)}`)}
+                                />
 
                                 <div>
                                     <span className='text_present_5_bold' >{calculatePercentage(pot.earnedValue, pot.goal)}%</span>

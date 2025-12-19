@@ -41,28 +41,3 @@ export const Container = styled.div<IProps>`
         justify-content: space-between;
     }
 `;
-
-export const HeaderModal = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 25px;
-        height: 25px;
-        border: 2px solid var(--grey_500);
-        border-radius: 50%;
-        color: var(--grey_500);
-
-        cursor: pointer;
-    }
-
-    strong {
-        color: var(--grey_900);
-    }
-`;

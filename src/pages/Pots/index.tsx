@@ -35,7 +35,8 @@ import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
 
 export default function Pots() {
 
-    const [viewModal, setViewModal] = useState<boolean>(false);
+    const [viewModalPot, setViewModalPot] = useState<boolean>(false);
+    const [viewWithdrawOrAdd, setViewWithdrawOrAdd] = useState<boolean>(true);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [countPages, setCountPages] = useState<number>(1);
@@ -65,10 +66,6 @@ export default function Pots() {
 
                     setListPots(fields.content);
 
-                    console.log(fields);
-                    console.log();
-                    console.log();
-
                 } catch (error) {
                     console.error("Error: ", error);
                 }
@@ -93,11 +90,17 @@ export default function Pots() {
         <Styled.Container>
 
             <ModalPot
-                close={viewModal}
+                close={viewModalPot}
                 modal='add'
-                onShow={() => setViewModal(viewModal)} />
+                onShow={(e) => setViewModalPot(e)} />
 
-            <WithdrawOrAdd />
+            <WithdrawOrAdd
+                id='5f587e84-2715-476f-8a3a-b72325067f7f'
+
+                onShow={(e) => setViewWithdrawOrAdd(e)}
+                operation='add'
+                close={viewWithdrawOrAdd}
+            />
 
             <Menu />
 
@@ -110,7 +113,7 @@ export default function Pots() {
 
                 <ul className='listPots' >
 
-{/* 
+                    {/* 
                 <li className='card' >
                             <div className='between' >
 

@@ -370,12 +370,11 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
         className='background_modal'
         show={close ? "view" : "hidden"} >
             <article className='card' >
-                {/* <Styled.HeaderModal> */}
+                
                 <div className="header_modal">
                     <strong className='text_present_1' >{modal == 'add' ? "Adicionar novo" : "Edite o"} Pote</strong>
                     <span className='text_present_5_bold' onClick={showModal} >X</span>
                 </div>
-                {/* </Styled.HeaderModal> */}
 
                 <p className='text_present_4' >
                     {modal === 'add'

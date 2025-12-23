@@ -17,21 +17,6 @@ interface IProps {
     operation: "add" | "withdraw";
 }
 
-
-/*
-
-porcentagem deveria o total, e não a diferença
-
-
-+ loading
-    + agora precisamos ajeitar o loading com as requisições
-    undefined = loading
-    null = erro
-
-+ modo visitante (sem conta)
- 
-*/
-
 export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) {
 
     const [wrongAmount, setWrongAmount] = useState<boolean>(false);
@@ -185,6 +170,26 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
             }, 700);
 
         } catch (error) {
+            if(axios.isAxiosError(error)) {
+
+                if (error.response?.status === 403) {
+                    userErrorResponse("Reconecte-se em sua conta");
+
+                    setTimeout(() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        navigate("/");
+                    }, 700);
+                }
+                else if (error.response?.data.message === "The new value cannot be the same as the previous one.") {
+                    userErrorResponse("Novo valor não pode ser igual a anterior");
+                    setWrongAmount(true);
+                }
+                 
+            } else {
+                
+                userErrorResponse("USrgiu um erro inesperado, por favor tente novamente mais tarde");
+            }
             console.error("Surgiu um erro inesperado > ", error);
         }
 

@@ -10,33 +10,13 @@ import baseurl from '../../../baseurl';
 import PaginationInput from '../../components/Inputs/PaginationInput';
 import { IPot } from '../../config/interfaces';
 import { calculatePercentage, formatNumber } from '../../config/utils';
-import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
 // import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
-
-/*
-
-
-    quarta
-    + mexer com backend
-        + adicionar 
-        + retirar
-    + front end
-        + modal de adicionar
-        + modal de retirar
-    
-    quinta
-    + mudar updates (de qualquer atualização, para apenas atualização de valores)
-    + modificar ou retirar os botões do info pot
-
-
-
-
-*/
+import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
 
 export default function Pots() {
 
     const [viewModalPot, setViewModalPot] = useState<boolean>(false);
-    const [viewWithdrawOrAdd, setViewWithdrawOrAdd] = useState<boolean>(true);
+    const [viewWithdrawOrAdd, setViewWithdrawOrAdd] = useState<boolean>(false);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [countPages, setCountPages] = useState<number>(1);
@@ -70,6 +50,8 @@ export default function Pots() {
                     console.error("Error: ", error);
                 }
             } else {
+
+                console.log("blz estamos aqui")
 
                 /*
 
@@ -113,45 +95,6 @@ export default function Pots() {
 
                 <ul className='listPots' >
 
-                    {/* 
-                <li className='card' >
-                            <div className='between' >
-
-                                <h2 className='text_present_2' >pot.title</h2>
-
-                                <div className="threePoints">
-                                    <div />
-                                    <div />
-                                    <div />
-                                </div>
-
-                            </div>
-
-                            <Styled.PotChartAndBar>
-
-                                <div >
-                                    <span className='text_present_4' >Total salvo</span>
-                                    <strong className='text_present_1' >R$10</strong>
-                                </div>
-
-                                <Styled.Bar
-                                    percentage={Number(`${calculatePercentage(10, 100)}`)}
-                                />
-
-                                <div>
-                                    <span className='text_present_5_bold' >10%</span>
-                                    <span className='text_present_5' >Meta de R$1000</span>
-                                </div>
-
-                            </Styled.PotChartAndBar>
-
-                            <div className="containerBtn">
-                                <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                                <Button order='secondary' >Retirar</Button>
-                            </div>
-
-                        </li> */}
-
                     {listPots.length > 0 ? listPots.map((pot: IPot) => (
                         <li className='card' key={pot.id} >
                             <div className='between' >
@@ -192,9 +135,7 @@ export default function Pots() {
                         </li>
                     )) : (<></>)}
 
-
                     {/* 
-
 
                     <li className='card' >
                         <div className='between' >
@@ -412,6 +353,7 @@ export default function Pots() {
 
                     </li>
                      */}
+
                 </ul>
 
                 <div className="pagination">

@@ -66,8 +66,8 @@ export default function Home() {
                     dispatch(
                         listPostUpdate(
                             {
-                                total: user.user.totalPots,
-                                list: user.user.pots
+                                total: user.pots.totalPots,
+                                list: user.pots.pots
                             }
 
                         )
@@ -91,22 +91,29 @@ export default function Home() {
                 <h1 className='text_present_1 '>Visão geral</h1>
 
                 <Styled.Grid>
+
                     <Values />
 
                     <div className='content_overview' >
 
                         <div className='content_left' >
+                        
                             <Pots />
+                        
                             <Transactions />
+
                         </div>
 
                         <div className='content_right' >
                             <Budgets />
                             <RecurringBills />
                         </div>
+
                     </div>
 
                 </Styled.Grid>
+
+
             </Styled.Content>
 
         </Styled.Container>

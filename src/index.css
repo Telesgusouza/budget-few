@@ -104,6 +104,10 @@ button {
   background-color: var(--white);
 }
 
+.center_text {
+  text-align: center;
+}
+
 @keyframes isLoading {
   0% {
     background-position: 0%;

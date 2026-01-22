@@ -17,6 +17,12 @@ interface IProps {
     operation: "add" | "withdraw";
 }
 
+/*
+
+    Fazer toda a parte offline do site
+
+*/
+
 export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) {
 
     const [wrongAmount, setWrongAmount] = useState<boolean>(false);
@@ -66,6 +72,8 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
                     earnedValue: field.earnedValue,
                     goal: field.goal,
                 });
+
+                TotalPercentage();
 
             } catch (error) {
                 setDataPot(null);
@@ -118,7 +126,7 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
             setTotalPercentage(porcentTarget);
         }
 
-    }, [dataPot]);
+    }, [dataPot])
 
     useEffect(() => {
 

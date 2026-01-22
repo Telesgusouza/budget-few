@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import { IGuestPot, IGuestUser, IPot, IUpdate } from "./interfaces";
 import { formatDate } from "./utils";
+import store from '../config/redux/store';
+import { listPostUpdate } from "./redux/User.store";
 
 export function guestUserAddPot(data: IPot, guest: IGuestUser) {
 
@@ -9,7 +11,7 @@ export function guestUserAddPot(data: IPot, guest: IGuestUser) {
 
     guest.pots.push(newPot);
 
-    savePot(data.monthlyAmount, data.id, guest);
+    savePot(data.earnedValue, data.id, guest);
     toast.success("Pote adicionado com sucesso")
 
     return true;
@@ -22,7 +24,7 @@ export function guestUserEditPot(data: IPot, guest: IGuestUser, id: string) {
         guest.pots[index].pot = data;
         guest.pots[index].lastUpdate = formatDate((new Date()).toString());
 
-        savePot(data.monthlyAmount, id, guest);
+        savePot(data.earnedValue, id, guest);
 
         return true
 
@@ -44,5 +46,13 @@ function savePot(value: number, id: string, guest: IGuestUser) {
 
     guest.pots[index].updates.push(date);
     localStorage.setItem("guest user", JSON.stringify(guest))
+
+    console.log("dentro do save do dispatch em utils")
+    console.log(guest)
+
+    store.dispatch(listPostUpdate({
+        total: guest.pots.length,
+        list: guest.pots
+    }));
 
 }

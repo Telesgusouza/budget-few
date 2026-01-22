@@ -12,6 +12,9 @@ import Button from '../../components/Button';
 import logoimage from '../../assets/imgs/Logo.svg';
 
 import LoadingInRotation from '../../components/LoadingInRotation';
+import { guestUserAddPot } from '../../config/utilsGuestUser';
+import colors from '../../config/colors';
+import { IGuestUser } from '../../config/interfaces';
 
 export default function SignupAndSingout() {
 
@@ -229,14 +232,28 @@ export default function SignupAndSingout() {
     // no user
     function guestUser() {
 
-        localStorage.setItem("guest user", JSON.stringify({
+        const guestUser: IGuestUser = {
             user: {
                 id: "id_guest_user",
                 login: "visitante@gmail.com",
                 name: "Visitante",
             },
             pots: [],
-        }));
+        };
+
+        guestUserAddPot({
+            id: (Math.random()).toString().split(".")[1],
+            
+            title: "Casa própria",
+            description: "Dinheiro com destino a casa própria",
+            
+            earnedValue: 0,
+            goal: 350000,
+
+            color: colors[0].color,
+        }, guestUser);
+
+        localStorage.setItem("guest user", JSON.stringify(guestUser));
 
         localStorage.removeItem("user");
         localStorage.removeItem("token");
@@ -294,7 +311,6 @@ export default function SignupAndSingout() {
                         />
 
                         <Input
-                            typeInput='password'
                             type={toggleShowPassword ? "password" : "text"}
                             label={toggleUserOperation ? 'Criar Senha' : 'Senha'}
                             value={password}

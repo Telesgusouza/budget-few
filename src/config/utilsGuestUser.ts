@@ -47,9 +47,6 @@ function savePot(value: number, id: string, guest: IGuestUser) {
     guest.pots[index].updates.push(date);
     localStorage.setItem("guest user", JSON.stringify(guest))
 
-    console.log("dentro do save do dispatch em utils")
-    console.log(guest)
-
     store.dispatch(listPostUpdate({
         total: guest.pots.length,
         list: guest.pots

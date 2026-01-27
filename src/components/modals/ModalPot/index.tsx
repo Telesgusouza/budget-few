@@ -22,7 +22,7 @@ interface IProps {
 
 /*
 
-    depois testar o editar
+    depois testar o editar de guest user
 
 */
 
@@ -310,7 +310,6 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                     if (modal === "add") {
 
-
                         guestUserAddPot({
                             id: (Math.random()).toString().split(".")[1],
                             
@@ -355,9 +354,6 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                     }
 
-                    // lista de potes
-                    // ele existe
-                    // voltar
                 }
             }
         }

@@ -56,7 +56,7 @@ export default function Pots() {
             <Styled.Header>
                 <h3 className="text_present_2" >Potes</h3>
 
-                <div className="text_present_4 see_details" onClick={() => navigateToAnotherPage("/pot")} >
+                <div className="text_present_4 see_details" onClick={() => navigateToAnotherPage("/pots")} >
                     Veja detalhes
                     <img src={img_caret_right} alt="Detalhes dos potes" />
                 </div>

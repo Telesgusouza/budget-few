@@ -10,6 +10,8 @@ interface IProps {
     disabled?: boolean;
     detroy?: boolean;
     className?: string;
+
+    onClick?: () => void;
 }
 
 export default function Button({ 
@@ -19,7 +21,10 @@ export default function Button({
     type = "button", 
     disabled= false, 
     detroy = false, 
-    className = "" }: IProps) {
+    className = "",
+    onClick
+
+}: IProps) {
 
     return (
         <>
@@ -30,6 +35,7 @@ export default function Button({
                 className={'text_present_4_bold ' + className} 
                 disabled={disabled}
                 detroy={detroy ? "detroy" : ""}
+                onClick={onClick}
                 >
                 {children}
             </Styled.Button>

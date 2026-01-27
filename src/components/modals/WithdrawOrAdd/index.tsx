@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import * as Styled from './style';
+import axios from 'axios';
+
 import Button from '../../Button';
 import Input from '../../Inputs/Input';
-import * as Styled from './style';
+
 import { formatNumber, validationInput } from '../../../config/utils';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+
 import baseurl from '../../../../baseurl';
-import { IPot } from '../../../config/interfaces';
-import { useNavigate } from 'react-router-dom';
+import { IGuestUser, IPot, IUpdate } from '../../../config/interfaces';
+import { guestUserEditPot } from '../../../config/utilsGuestUser';
 
 interface IProps {
     id: string;
@@ -43,75 +48,100 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
 
             const tokenJson = localStorage.getItem('token');
 
-            if (!tokenJson) {
-                toast.warn("Conta deslogagada");
-                return;
-            }
+            if (tokenJson) {
+                try {
 
-            try {
+                    setDataPot(undefined);
 
-                setDataPot(undefined);
+                    const token = JSON.parse(tokenJson);
 
-                const token = JSON.parse(tokenJson);
+                    const data = await axios.get(`${baseurl}/pot/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token.token}`
+                        }
+                    });
 
-                const data = await axios.get(`${baseurl}/pot/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token.token}`
+                    const field = data.data;
+
+                    setDataPot({
+                        id: id,
+
+                        title: field.title,
+                        description: field.description,
+                        color: field.color,
+
+                        earnedValue: field.earnedValue,
+                        goal: field.goal,
+                    });
+
+                    TotalPercentage();
+
+                } catch (error) {
+                    setDataPot(null);
+
+                    if (axios.isAxiosError(error)) {
+
+                        if (error.response?.status === 403) {
+                            toast.warn("reconecte-se em sua conta");
+
+                            setTimeout(() => {
+                                localStorage.removeItem("token");
+                                localStorage.removeItem("user");
+                                navigate("/");
+                            }, 700);
+                        }
+
+                        switch (error.response?.data.message) {
+                            case "info pot not found": {
+                                userErrorResponse("Não foi possivel encontrar informações sobre o pote");
+                                break;
+                            }
+
+                            case "id cannot be null": {
+                                userErrorResponse("Erro com o ID do pote");
+                                break;
+                            }
+
+                            case "pot not found": {
+                                userErrorResponse("pote não encontrado");
+                                break;
+                            }
+
+                            default: {
+                                userErrorResponse("Erro ao fazer requisição, tente novamente mais tarde");
+                            }
+                        }
+                    } else {
+                        userErrorResponse("Erro desconhecido, por favor tente novamente mais tarde");
                     }
-                });
+                }
+            } else {
+                const guestJson = localStorage.getItem("guest user");
 
-                const field = data.data;
+                if (guestJson) {
+                    const guest: IGuestUser = JSON.parse(guestJson);
 
-                setDataPot({
-                    id: id,
+                    const findPot = guest.pots.find(pot => pot.pot.id === id);
 
-                    title: field.title,
-                    description: field.description,
-                    color: field.color,
-
-                    earnedValue: field.earnedValue,
-                    goal: field.goal,
-                });
-
-                TotalPercentage();
-
-            } catch (error) {
-                setDataPot(null);
-
-                if (axios.isAxiosError(error)) {
-
-                    if (error.response?.status === 403) {
-                        toast.warn("reconecte-se em sua conta");
-
-                        setTimeout(() => {
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("user");
-                            navigate("/");
-                        }, 700);
+                    if (!findPot?.pot) {
+                        toast.warn("Pote não foi encontrado, por favor tente novamente");
+                        return;
                     }
 
-                    switch (error.response?.data.message) {
-                        case "info pot not found": {
-                            userErrorResponse("Não foi possivel encontrar informações sobre o pote");
-                            break;
-                        }
+                    const pot = findPot.pot;
 
-                        case "id cannot be null": {
-                            userErrorResponse("Erro com o ID do pote");
-                            break;
-                        }
+                    setDataPot({
+                        id: pot.id,
 
-                        case "pot not found": {
-                            userErrorResponse("pote não encontrado");
-                            break;
-                        }
+                        title: pot.title,
+                        description: pot.description,
+                        color: pot.color,
 
-                        default: {
-                            userErrorResponse("Erro ao fazer requisição, tente novamente mais tarde");
-                        }
-                    }
-                } else {
-                    userErrorResponse("Erro desconhecido, por favor tente novamente mais tarde");
+                        earnedValue: pot.earnedValue,
+                        goal: pot.goal,
+                    });
+
+                    TotalPercentage();
                 }
             }
         }
@@ -151,18 +181,37 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
 
         if (!jsonToken) {
             //Precisamos voltar aqui (visitante/offline)
-            navigate("/");
+
+            const guestLocalstorage = localStorage.getItem("guest user");
+
+            if (!guestLocalstorage) {
+                toast.warn("Entre como visitante ou faça login")
+                navigate("/");
+                return;
+            }
+
+            const amountToBeSent = AmountToBeSent();
+            const guestUser: IGuestUser = JSON.parse(guestLocalstorage);
+
+            const pot = guestUser.pots.find(pot => pot.pot.id === id);
+
+            if (pot) {
+                pot.pot.earnedValue = amountToBeSent;
+
+                guestUserEditPot(pot.pot, guestUser, id);
+                toast.success("Atualizado com sucesso", { autoClose: 700 });
+                setTimeout(() => {
+                    onShow(false)
+                }, 700);
+            }
+
             return;
         }
 
         try {
 
             const token = JSON.parse(jsonToken);
-            const value = Number(amount.replace(",", "."));
-
-            const amountToBeSent = (operation === "add")
-                ? value + Number(dataPot?.earnedValue)
-                : value - Number(dataPot?.earnedValue);
+            const amountToBeSent = AmountToBeSent();
 
             await axios.patch(`${baseurl}/pot/${id}`, {
                 newValue: amountToBeSent
@@ -178,7 +227,7 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
             }, 700);
 
         } catch (error) {
-            if(axios.isAxiosError(error)) {
+            if (axios.isAxiosError(error)) {
 
                 if (error.response?.status === 403) {
                     userErrorResponse("Reconecte-se em sua conta");
@@ -193,14 +242,22 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
                     userErrorResponse("Novo valor não pode ser igual a anterior");
                     setWrongAmount(true);
                 }
-                 
+
             } else {
-                
+
                 userErrorResponse("USrgiu um erro inesperado, por favor tente novamente mais tarde");
             }
             console.error("Surgiu um erro inesperado > ", error);
         }
 
+    }
+
+    function AmountToBeSent() {
+        const value = Number(amount.replace(",", "."));
+
+        return (operation === "add")
+            ? value + Number(dataPot?.earnedValue)
+            : Number(dataPot?.earnedValue) - value;
     }
 
     function TotalPercentage() {

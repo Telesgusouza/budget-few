@@ -8,10 +8,16 @@ import Menu from '../../components/Menu';
 import ModalPot from '../../components/modals/ModalPot';
 import baseurl from '../../../baseurl';
 import PaginationInput from '../../components/Inputs/PaginationInput';
-import { IPot } from '../../config/interfaces';
+import { IGuestPot, IGuestUser, IPot } from '../../config/interfaces';
 import { calculatePercentage, formatNumber } from '../../config/utils';
-// import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
 import WithdrawOrAdd from '../../components/modals/WithdrawOrAdd';
+import { useNavigate } from 'react-router-dom';
+
+/*
+
+precisar fazer tratamento de erro aqui
+
+*/
 
 export default function Pots() {
 
@@ -23,9 +29,20 @@ export default function Pots() {
 
     const [listPots, setListPots] = useState<IPot[]>([]);
 
+    const [currentPot, setCurrentPot] = useState<{
+        id: string,
+        operation: "add" | "withdraw"
+    }>({
+        id: "",
+        operation: "add"
+    });
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         async function getListPots() {
             const tokenJson = localStorage.getItem("token");
+            const guestJson = localStorage.getItem("guest user");
 
             setCountPages(10);
 
@@ -49,24 +66,39 @@ export default function Pots() {
                 } catch (error) {
                     console.error("Error: ", error);
                 }
-            } else {
+            } else if (!tokenJson && guestJson) {
+                const guest: IGuestUser = JSON.parse(guestJson);
 
-                console.log("blz estamos aqui")
+                const list = guest.pots.map((obj: IGuestPot) => obj.pot);
 
-                /*
-
-                    ATENÇÃO
-                    *  sem token
-                       verificar se e visitate
-
-                */
-
+                setCountPages(Math.ceil(list.length / 6));
+                setListPots(list);
             }
-
         }
 
         getListPots();
-    }, []);
+    }, [viewModalPot]);
+
+    useEffect(() => {
+        const guestJson = localStorage.getItem("guest user");
+        if (guestJson) {
+
+            const guest: IGuestUser = JSON.parse(guestJson);
+
+            const list = guest.pots.map((obj: IGuestPot) => obj.pot);
+
+            setCountPages(Math.ceil(list.length / 6));
+            setListPots(list);
+        }
+    }, [viewWithdrawOrAdd]);
+
+    function toggleWithdrawOrAdd(id: string, operation: "add" | "withdraw") {
+        setCurrentPot({
+            id: id,
+            operation: operation
+        })
+        setViewWithdrawOrAdd(true);
+    }
 
     return (
         <Styled.Container>
@@ -76,13 +108,16 @@ export default function Pots() {
                 modal='add'
                 onShow={(e) => setViewModalPot(e)} />
 
-            <WithdrawOrAdd
-                id='5f587e84-2715-476f-8a3a-b72325067f7f'
 
-                onShow={(e) => setViewWithdrawOrAdd(e)}
-                operation='add'
-                close={viewWithdrawOrAdd}
-            />
+            {viewWithdrawOrAdd && (
+                <WithdrawOrAdd
+                    id={currentPot.id}
+
+                    onShow={(e) => setViewWithdrawOrAdd(e)}
+                    operation={currentPot.operation}
+                    close={viewWithdrawOrAdd}
+                />
+            )}
 
             <Menu />
 
@@ -90,7 +125,7 @@ export default function Pots() {
 
                 <header>
                     <h1 className='text_present_1' >Pots</h1>
-                    <Button > + Adicionar Pote</Button>
+                    <Button onClick={() => { setViewModalPot(true) }} > + Adicionar Pote</Button>
                 </header>
 
                 <ul className='listPots' >
@@ -99,9 +134,9 @@ export default function Pots() {
                         <li className='card' key={pot.id} >
                             <div className='between' >
 
-                                <h2 className='text_present_2' >{pot.title}</h2>
+                                <Styled.CardTitle ballColor={pot.color} className='text_present_2' >{pot.title}</Styled.CardTitle>
 
-                                <div className="threePoints">
+                                <div className="threePoints" onClick={() => navigate("/pot_info/" + pot.id)} >
                                     <div />
                                     <div />
                                     <div />
@@ -128,231 +163,12 @@ export default function Pots() {
                             </Styled.PotChartAndBar>
 
                             <div className="containerBtn">
-                                <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                                <Button order='secondary' >Retirar</Button>
+                                <Button type='submit' order='secondary' onClick={() => toggleWithdrawOrAdd(pot.id, 'add')} >+Adicionar dinheiro</Button>
+                                <Button order='secondary' onClick={() => toggleWithdrawOrAdd(pot.id, 'withdraw')} >Retirar</Button>
                             </div>
 
                         </li>
                     )) : (<></>)}
-
-                    {/* 
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-
-                    <li className='card' >
-                        <div className='between' >
-
-                            <h2 className='text_present_2' >teste</h2>
-
-                            <div className="threePoints">
-                                <div />
-                                <div />
-                                <div />
-                            </div>
-
-                        </div>
-
-                        <Styled.PotChartAndBar>
-
-                            <div >
-                                <span className='text_present_4' >Total salvo</span>
-                                <strong className='text_present_1' >R$159,00</strong>
-                            </div>
-
-                            <Styled.Bar />
-
-                            <div>
-                                <span className='text_present_5_bold' >7.95%</span>
-                                <span className='text_present_5' >Meta de R$2.000</span>
-                            </div>
-
-                        </Styled.PotChartAndBar>
-
-                        <div className="containerBtn">
-                            <Button type='submit' order='secondary' >+Adicionar dinheiro</Button>
-                            <Button order='secondary' >Retirar</Button>
-                        </div>
-
-                    </li>
-                     */}
 
                 </ul>
 

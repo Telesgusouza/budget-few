@@ -4,6 +4,10 @@ interface IBar {
     percentage: number;
 }
 
+interface ICardTitle {
+    ballColor: string;
+}
+
 export const Container = styled.div`
     display: flex;
     flex-direction: row;
@@ -33,31 +37,6 @@ export const Container = styled.div`
 
     h1 {
         color: var(--grey_900);
-    }
-
-    h2 {
-
-        position: relative;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        flex-direction: center;
-
-        color: var(--grey_900);
-
-        &::before {
-            content: "";
-
-            margin: auto 16px auto 0;
-
-            max-width: 16px;
-            max-height: 16px;
-
-            padding: 8px;
-            border-radius: 50%;
-            background-color: black;
-        }
     }
 
     .listPots {
@@ -113,6 +92,31 @@ export const Container = styled.div`
         section {
             padding: 0 16px;
         }   
+    }
+`;
+
+export const CardTitle = styled.h2<ICardTitle>`
+
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-direction: center;
+
+    color: var(--grey_900);
+
+    &::before {
+        content: "";
+
+        margin: auto 16px auto 0;
+
+        max-width: 16px;
+        max-height: 16px;
+
+        padding: 8px;
+        border-radius: 50%;
+        background-color: var(${props => props.ballColor});
     }
 `;
 

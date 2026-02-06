@@ -11,8 +11,9 @@ import colors from '../../../config/colors';
 import Input from '../../Inputs/Input';
 import InputAccordion from '../../Inputs/InputAccordion';
 import Button from '../../Button';
-import { IGuestUser, IOptionsInputAccordion } from '../../../config/interfaces';
+import { IGuestUser, IOptionsInputAccordion, RootState } from '../../../config/interfaces';
 import { guestUserAddPot, guestUserEditPot } from '../../../config/utilsGuestUser';
+import { useSelector } from 'react-redux';
 
 interface IProps {
     modal: "add" | "edit"
@@ -28,6 +29,7 @@ interface IProps {
 
 export default function ModalPot({ onShow, close, modal }: IProps) {
 
+    const { pots } = useSelector((rootReducer: RootState) => rootReducer.user);
     const { idPot } = useParams();
     const navigate = useNavigate();
 
@@ -45,6 +47,37 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     const [listTheme] = useState<IOptionsInputAccordion[]>(colors);
 
     const [buttonRelease, setButtonRelease] = useState<boolean>(false);
+
+    useEffect(() => {
+
+        if (pots.list.length !== 0) {
+            const pot = pots.list.find(item => item.id === idPot);
+            const goal = String(pot?.goal.toFixed(2).replace(".", ','));
+            const earnedValue = String(pot?.earnedValue.toFixed(2).replace(".", ','));
+
+            if (pot) {
+                setPotName(pot.title ? pot.title : "");
+                setPotDescription(pot.description ? pot.description : "");
+                setTargetValue(pot.goal ? goal : "0,00");
+                setInitialValue(pot.earnedValue ? earnedValue : "0,00");
+            }
+        } else {
+            const guestJson = localStorage.getItem("guest user");
+
+            if (guestJson) {
+                const guest: IGuestUser = JSON.parse(guestJson);
+                const pot = guest.pots.find(item => item.pot.id === idPot);
+                const goal = String(pot?.pot.goal.toFixed(2).replace(".", ","));
+                const earnedValue = String(pot?.pot.earnedValue.toFixed(2).replace(".", ","))
+
+                setPotName(pot ? pot.pot.title : "");
+                setPotDescription(pot?.pot.description ? pot.pot.description : "");
+                setTargetValue(pot?.pot.goal ? goal : "0,00");
+                setInitialValue(pot?.pot.earnedValue ? earnedValue : "0,00");
+            }
+        }
+
+    }, []);
 
     useEffect(() => {
         if (potNameWrong) {
@@ -89,19 +122,19 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             } else if (type === "goal") {
                 setInitialValue(value);
             }
-            
+
         }
     }
 
     function takeTheFocus(type: "target" | "goal") {
 
-        if(type === "target") {
-            setTargetValue("")    
+        if (type === "target") {
+            setTargetValue("")
         } else if (type === "goal") {
             setInitialValue("");
         }
 
-        const separateValues = (type === "target" 
+        const separateValues = (type === "target"
             ? targetValue
             : initialValue).split(",");
 
@@ -130,8 +163,8 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             }
         }
 
-        if(type === "target") {
-            setTargetValue(separateValues.join());    
+        if (type === "target") {
+            setTargetValue(separateValues.join());
         } else if (type === "goal") {
             setInitialValue(separateValues.join());
         }
@@ -161,7 +194,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             const earned = parseFloat(initialValue.replace(",", "."));
 
             await axios.put(`${baseurl}/pot/${idPot}`, {
-               
+
                 title: potName,
                 description: potDescription,
                 earnedValue: earned,
@@ -312,10 +345,10 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                         guestUserAddPot({
                             id: (Math.random()).toString().split(".")[1],
-                            
+
                             title: potName,
                             description: potDescription,
-                            
+
                             earnedValue: earned,
                             goal: target,
 
@@ -334,7 +367,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
 
                                 title: potName,
                                 description: potDescription,
-                                
+
                                 earnedValue: earned,
                                 goal: target,
 
@@ -362,11 +395,11 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
     }
 
     return (
-        <Styled.Container 
-        className='background_modal'
-        show={close ? "view" : "hidden"} >
+        <Styled.Container
+            className='background_modal'
+            show={close ? "view" : "hidden"} >
             <article className='card' >
-                
+
                 <div className="header_modal">
                     <strong className='text_present_1' >{modal == 'add' ? "Adicionar novo" : "Edite o"} Pote</strong>
                     <span className='text_present_5_bold' onClick={showModal} >X</span>
@@ -400,7 +433,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                         label='Objetivo'
 
                         onChange={(e) => dealingWithValueInputs(e, "target")}
-                        onBlur={() =>takeTheFocus('target')}
+                        onBlur={() => takeTheFocus('target')}
                         onFocus={() => cleanInput('target')}
 
                         value={targetValue}
@@ -408,18 +441,18 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
                         type='target'
                     />
 
-                    <Input 
-                    
-                    label='Valor inicial'
+                    <Input
 
-                    onChange={(e) => dealingWithValueInputs(e, "goal")}
-                    onBlur={() =>takeTheFocus('goal')}
-                    onFocus={() => cleanInput('goal')}
+                        label='Valor inicial'
 
-                    value={initialValue}
-                    wrong={initialValueWrong}
-                    
-                    type='target'
+                        onChange={(e) => dealingWithValueInputs(e, "goal")}
+                        onBlur={() => takeTheFocus('goal')}
+                        onFocus={() => cleanInput('goal')}
+
+                        value={initialValue}
+                        wrong={initialValueWrong}
+
+                        type='target'
                     />
 
                     <InputAccordion

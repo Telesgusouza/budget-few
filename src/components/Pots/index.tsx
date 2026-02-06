@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { IGuestPot, IPot, RootState } from "../../config/interfaces.ts";
-import { formatNumber } from "../../config/utils.ts";
 
 import Li from "../Li/index.tsx";
 

@@ -16,6 +16,18 @@ import { formatDate, formatNumber } from '../../config/utils';
 
 import period from '../../config/period';
 
+/*
+
+guest user = iniciar aqui
+adições, exclusão e adicionar dinheiro
+filtro
+
+
+primeiro testar
+online = arrumar por conta das mudanças que ocorreram
+
+*/
+
 export default function PotInfo() {
 
     const [errorInRequest, setErrorInRequest] = useState<boolean>(false);
@@ -28,11 +40,15 @@ export default function PotInfo() {
     const [listOfPeriods] = useState<IOptionsInputAccordion[]>(period);
     const [currentPeriod, setCurrentPeriod] = useState<IOptionsInputAccordion>(period[0]);
 
-    const [showModalPot, setShowModalPot] = useState<boolean>(true);
+    const [showModalPot, setShowModalPot] = useState<boolean>(false);
+    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const [showModalDelete, setShowModalDelete] = useState<boolean>(false)
 
     const navigate = useNavigate();
 
     const ModalPot = lazy(() => import('../../components/modals/ModalPot'));
+    const WithdrawOrAdd = lazy(() => import('../../components/modals/WithdrawOrAdd'));
+    const ModalDelete = lazy(() => import('../../components/modals/ModalDelete'));
 
     const { idPot } = useParams();
 
@@ -64,7 +80,8 @@ export default function PotInfo() {
                         id: idPot + "",
                         title: field.title,
                         description: field.description,
-                        monthlyAmount: field.monthlyAmount,
+                        earnedValue: field.earnedValue,
+                        goal: field.goal,
                         color: field.color
                     });
 
@@ -126,7 +143,6 @@ export default function PotInfo() {
         }
 
         getInfopot();
-        // getListUpdate();
     }, []);
 
     function userErrorResponse(msg: string) {
@@ -218,11 +234,23 @@ export default function PotInfo() {
 
             {!errorInRequest ? (
                 <>
+                    {showModalPot &&
+                        <Suspense fallback={<div>Carregando...</div>}>
+                            <ModalPot modal='edit' onShow={setShowModalPot} close={showModalPot} />
+                        </Suspense>
+                    }
 
-                    <Suspense fallback={<div>Carregando...</div>}>
-                        <ModalPot modal='edit' onShow={setShowModalPot} close={showModalPot} />
-                    </Suspense>
+                    {showAddModal &&
+                        <Suspense fallback={<div>Carregando...</div>}>
+                            <WithdrawOrAdd id={idPot ? idPot : ""} operation='add' onShow={setShowAddModal} close={showAddModal} />
+                        </Suspense>
+                    }
 
+                    {showModalDelete && idPot &&
+                        < Suspense fallback={<div>Carregando...</div>}>
+                            <ModalDelete id={idPot} onShow={setShowModalDelete} close={showModalDelete} />
+                        </Suspense>
+                    }
 
                     <Styled.BackPage onClick={backPage} >
 
@@ -278,7 +306,7 @@ export default function PotInfo() {
                                 </p>
 
                                 <strong className='text_present_2' >
-                                    R$ {current && formatNumber(current.monthlyAmount)}
+                                    R$ {current && formatNumber(current.earnedValue)}
                                 </strong>
                             </>
                         ) : (
@@ -295,11 +323,11 @@ export default function PotInfo() {
                         )}
 
                         <div className='container_btns' >
-                            <Button className="edit-btn" >Edite</Button>
+                            <Button className="edit-btn" onClick={() => setShowModalPot(true)} >Edite</Button>
 
-                            <Button detroy={true} className="del-btn" >Deletar</Button>
+                            <Button detroy={true} className="del-btn" onClick={() => setShowModalDelete(true)} >Deletar</Button>
 
-                            <Button className="add-btn" >Adicionar dinheiro + </Button>
+                            <Button className="add-btn" onClick={() => setShowAddModal(true)} >Adicionar dinheiro + </Button>
                         </div>
 
                     </Styled.Content>
@@ -310,7 +338,8 @@ export default function PotInfo() {
                         <p className='text_present_4_bold' >Ouve um erro durante a requisição, reinicie a página ou volte a página anterior</p>
                     </Styled.ContentError>
                 </>
-            )}
-        </Styled.Container>
+            )
+            }
+        </Styled.Container >
     )
 }

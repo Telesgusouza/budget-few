@@ -45,7 +45,7 @@ function savePot(value: number, id: string, guest: IGuestUser) {
     };
 
     guest.pots[index].updates.push(date);
-    localStorage.setItem("guest user", JSON.stringify(guest))
+    localStorage.setItem("guest user", JSON.stringify(guest));
 
     store.dispatch(listPostUpdate({
         total: guest.pots.length,

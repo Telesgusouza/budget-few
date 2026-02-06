@@ -11,7 +11,7 @@ import Input from '../../Inputs/Input';
 import { formatNumber, validationInput } from '../../../config/utils';
 
 import baseurl from '../../../../baseurl';
-import { IGuestUser, IPot, IUpdate } from '../../../config/interfaces';
+import { IGuestUser, IPot } from '../../../config/interfaces';
 import { guestUserEditPot } from '../../../config/utilsGuestUser';
 
 interface IProps {
@@ -333,11 +333,8 @@ export default function WithdrawOrAdd({ id, close, onShow, operation }: IProps) 
 
         setAmount("")
 
-
         const separateValues = amount.split(",");
-
-
-
+        
         if (amount.split(",").length < 2) {
             separateValues.push("00");
         }

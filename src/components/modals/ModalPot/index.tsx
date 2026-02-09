@@ -21,12 +21,6 @@ interface IProps {
     close: boolean;
 }
 
-/*
-
-    depois testar o editar de guest user
-
-*/
-
 export default function ModalPot({ onShow, close, modal }: IProps) {
 
     const { pots } = useSelector((rootReducer: RootState) => rootReducer.user);
@@ -177,7 +171,7 @@ export default function ModalPot({ onShow, close, modal }: IProps) {
             setTargetValue("");
         }
 
-        if (type === "goal" && targetValue === "0,00") {
+        if (type === "goal" && initialValue === "0,00") {
             setInitialValue("");
         }
     }

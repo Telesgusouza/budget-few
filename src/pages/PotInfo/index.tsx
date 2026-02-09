@@ -1,32 +1,20 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
 import * as Styled from './style';
 
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
+import ModalLoading from '../../components/modals/ModalLoading';
 import TinyLine from '../../components/TinyLine';
 import Button from '../../components/Button';
-// import ModalOperation from '../../components/modals/ModalOperation';
 import InputAccordion from '../../components/Inputs/InputAccordion';
 
-import axios from 'axios';
-import baseurl from '../../../baseurl';
 import { IGuestUser, IOptionsInputAccordion, IPot, ITinyLine, IUpdate } from '../../config/interfaces';
 import { formatDate, formatNumber } from '../../config/utils';
-
 import period from '../../config/period';
 
-/*
-
-guest user = iniciar aqui
-adições, exclusão e adicionar dinheiro
-filtro
-
-
-primeiro testar
-online = arrumar por conta das mudanças que ocorreram
-
-*/
+import baseurl from '../../../baseurl';
 
 export default function PotInfo() {
 
@@ -51,6 +39,13 @@ export default function PotInfo() {
     const ModalDelete = lazy(() => import('../../components/modals/ModalDelete'));
 
     const { idPot } = useParams();
+
+    const userErrorResponse = useCallback((msg: string) => {
+        toast.warn(msg);
+        setTimeout(() => {
+            backPage();
+        }, 700);
+    }, []);
 
     useEffect(() => {
 
@@ -143,15 +138,7 @@ export default function PotInfo() {
         }
 
         getInfopot();
-    }, []);
-
-    function userErrorResponse(msg: string) {
-        toast.warn(msg);
-
-        setTimeout(() => {
-            backPage();
-        }, 700);
-    }
+    }, [idPot, navigate, userErrorResponse]);
 
     async function getListUpdate() {
 
@@ -235,19 +222,19 @@ export default function PotInfo() {
             {!errorInRequest ? (
                 <>
                     {showModalPot &&
-                        <Suspense fallback={<div>Carregando...</div>}>
+                        <Suspense fallback={<ModalLoading width={450} />}>
                             <ModalPot modal='edit' onShow={setShowModalPot} close={showModalPot} />
                         </Suspense>
                     }
 
                     {showAddModal &&
-                        <Suspense fallback={<div>Carregando...</div>}>
+                        <Suspense fallback={<ModalLoading width={450} height={600} />}>
                             <WithdrawOrAdd id={idPot ? idPot : ""} operation='add' onShow={setShowAddModal} close={showAddModal} />
                         </Suspense>
                     }
 
                     {showModalDelete && idPot &&
-                        < Suspense fallback={<div>Carregando...</div>}>
+                        < Suspense fallback={<ModalLoading width={450} />}>
                             <ModalDelete id={idPot} onShow={setShowModalDelete} close={showModalDelete} />
                         </Suspense>
                     }

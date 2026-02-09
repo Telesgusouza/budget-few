@@ -34,7 +34,7 @@ export default function Button({
 
                 className={'text_present_4_bold ' + className} 
                 disabled={disabled}
-                detroy={detroy ? "detroy" : ""}
+                $detroy={detroy ? "detroy" : ""}
                 onClick={onClick}
                 >
                 {children}

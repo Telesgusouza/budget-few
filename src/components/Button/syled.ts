@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface IProps {
-    detroy: "detroy" | "";
+    $detroy: "detroy" | "";
     order: "primary" | "secondary" | "tertiary";
 }
 
@@ -13,7 +13,7 @@ export const Button = styled.button<IProps>`
 
     transition: opacity .2s ease-in-out;
 
-    ${props => props.detroy == "detroy" && 
+    ${props => props.$detroy == "detroy" && 
     css`
         background-color: var(--red);
         color: var(--white);
@@ -21,7 +21,7 @@ export const Button = styled.button<IProps>`
 
 
 
-    ${props => props.detroy === "" && css`
+    ${props => props.$detroy === "" && css`
         ${props.order === "primary" && css`
             background-color: var(--grey_900);
             color: var(--white);
